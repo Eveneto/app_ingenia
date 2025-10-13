@@ -1,51 +1,64 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# App Ingenia - React Native
 
-# Getting Started
+Um projeto React Native criado para demonstrar o desenvolvimento mobile moderno.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 🚀 Configuração do Ambiente
 
-## Step 1: Start Metro
+### Pré-requisitos
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- ✅ Node.js v20.19.3
+- ✅ npm v10.8.2
+- ✅ Java 17 (OpenJDK)
+- ⚠️ Android Studio (recomendado)
+- ⚠️ Watchman (para melhor performance)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Instalação
 
-```sh
-# Using npm
-npm start
+1. **Clone o projeto** (se necessário):
+   ```bash
+   cd /home/dev_pc/Documentos/app_ingenia/AppIngenia
+   ```
 
-# OR using Yarn
-yarn start
+2. **Instale as dependências**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure o Android Studio** (se necessário):
+   - Baixe e instale o [Android Studio](https://developer.android.com/studio)
+   - Configure as variáveis de ambiente:
+   
+   ```bash
+   # Adicione ao ~/.bashrc
+   export ANDROID_HOME=$HOME/Android/Sdk
+   export PATH=$PATH:$ANDROID_HOME/emulator
+   export PATH=$PATH:$ANDROID_HOME/tools
+   export PATH=$PATH:$ANDROID_HOME/tools/bin
+   export PATH=$PATH:$ANDROID_HOME/platform-tools
+   ```
+
+4. **Instale o Watchman** (opcional, mas recomendado):
+   ```bash
+   sudo apt update && sudo apt install watchman
+   ```
+
+## 📱 Executando o Projeto
+
+### Metro Bundler
+Primeiro, inicie o Metro bundler:
+```bash
+npx react-native start
 ```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
 
 ### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+Em um novo terminal:
+```bash
+npx react-native run-android
 ```
 
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
+### iOS (apenas macOS)
+```bash
+npx react-native run-ios
 ```
 
 For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
