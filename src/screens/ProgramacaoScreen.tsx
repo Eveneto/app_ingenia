@@ -6,6 +6,8 @@ import {
   View,
   useColorScheme,
   TouchableOpacity,
+  Linking,
+  ScrollView,
 } from 'react-native';
 import Header from '../components/Header';
 import ViewModeToggle from '../components/ViewModeToggle';
@@ -14,7 +16,7 @@ import ListViewNew from '../components/ListViewNew';
 import { ViewMode } from '../types/Event';
 import { events } from '../data/events';
 
-const HomeScreen: React.FC = () => {
+const ProgramacaoScreen: React.FC = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedDay, setSelectedDay] = useState<number>(1);
@@ -36,7 +38,7 @@ const HomeScreen: React.FC = () => {
   return (
     <SafeAreaView style={[styles.container, isDarkMode && styles.containerDark]}>
       <Header />
-      
+
       <View style={[styles.dateContainer, isDarkMode && styles.dateContainerDark]}>
         <Text style={[styles.dateText, isDarkMode && styles.dateTextDark]}>
           {currentDayInfo.date}
@@ -44,7 +46,7 @@ const HomeScreen: React.FC = () => {
         <Text style={[styles.subtitleText, isDarkMode && styles.subtitleTextDark]}>
           {currentDayInfo.description}
         </Text>
-        
+
         {/* Botões de navegação por dia - apenas para visualização de tabela */}
         {viewMode === 'table' && (
           <View style={styles.daySelector}>
@@ -58,33 +60,29 @@ const HomeScreen: React.FC = () => {
                   selectedDay === day && isDarkMode && styles.dayButtonActiveDark,
                 ]}
                 onPress={() => setSelectedDay(day)}
-              >
-                <Text style={[
-                  styles.dayButtonText,
-                  selectedDay === day && styles.dayButtonTextActive,
-                  isDarkMode && styles.dayButtonTextDark,
-                  selectedDay === day && isDarkMode && styles.dayButtonTextActiveDark,
-                ]}>
+                activeOpacity={0.7}>
+                <Text
+                  style={[
+                    styles.dayButtonText,
+                    selectedDay === day && styles.dayButtonTextActive,
+                    isDarkMode && styles.dayButtonTextDark,
+                    selectedDay === day && isDarkMode && styles.dayButtonTextActiveDark,
+                  ]}>
                   Dia {day}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
         )}
+
+        <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
       </View>
 
-      <ViewModeToggle 
-        currentMode={viewMode} 
-        onModeChange={setViewMode} 
-      />
-      
-      <View style={styles.content}>
-        {viewMode === 'table' ? (
-          <TableView events={dayEvents} />
-        ) : (
-          <ListViewNew selectedDay={selectedDay} onDayChange={setSelectedDay} />
-        )}
-      </View>
+      {viewMode === 'table' ? (
+        <TableView events={dayEvents} />
+      ) : (
+        <ListViewNew selectedDay={selectedDay} onDayChange={setSelectedDay} />
+      )}
     </SafeAreaView>
   );
 };
@@ -92,27 +90,26 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f5f5f5',
   },
   containerDark: {
     backgroundColor: '#1a1a1a',
   },
   dateContainer: {
+    backgroundColor: '#ffffff',
     padding: 16,
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
   dateContainerDark: {
-    backgroundColor: '#2a2a2a',
-    borderBottomColor: '#404040',
+    backgroundColor: '#2c2c2c',
+    borderBottomColor: '#555555',
   },
   dateText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 4,
+    textAlign: 'center',
   },
   dateTextDark: {
     color: '#ffffff',
@@ -121,41 +118,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     textAlign: 'center',
+    marginTop: 4,
   },
   subtitleTextDark: {
     color: '#cccccc',
   },
-  content: {
-    flex: 1,
-  },
   daySelector: {
     flexDirection: 'row',
-    marginTop: 12,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 8,
-    padding: 4,
+    justifyContent: 'center',
+    marginTop: 16,
   },
   dayButton: {
-    flex: 1,
-    paddingVertical: 8,
+    backgroundColor: '#f0f0f0',
     paddingHorizontal: 16,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginHorizontal: 2,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginHorizontal: 4,
   },
   dayButtonActive: {
     backgroundColor: '#FF002E',
   },
   dayButtonDark: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#3c3c3c',
   },
   dayButtonActiveDark: {
-    backgroundColor: '#FF002E',
+    backgroundColor: '#5AC8FA',
   },
   dayButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000000',
+    color: '#666666',
   },
   dayButtonTextActive: {
     color: '#ffffff',
@@ -168,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default ProgramacaoScreen;

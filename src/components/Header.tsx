@@ -1,26 +1,24 @@
 import React from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
+  Image,
   useColorScheme,
   View,
 } from 'react-native';
 
 interface HeaderProps {
-  title: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ title }) => {
+const Header: React.FC<HeaderProps> = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <View style={[styles.header, isDarkMode && styles.headerDark]}>
-      <Text style={[styles.headerText, isDarkMode && styles.headerTextDark]}>
-        {title}
-      </Text>
+      <Image
+        source={require('../../assets/images/logo-ingenia-2025-semfundo.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
     </View>
   );
 };
@@ -36,14 +34,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#333333',
     borderBottomColor: '#555555',
   },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333333',
-    textAlign: 'center',
-  },
-  headerTextDark: {
-    color: '#ffffff',
+  logo: {
+    width: '100%',
+    height: 100,
+    alignSelf: 'center',
   },
 });
 

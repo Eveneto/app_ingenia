@@ -7,13 +7,11 @@ import {
   useColorScheme,
   TouchableOpacity,
 } from 'react-native';
-import { EventItem } from '../types/Event';
 
 interface ListViewProps {
-  events: EventItem[];
 }
 
-const ListView: React.FC<ListViewProps> = ({ events }) => {
+const ListView: React.FC<ListViewProps> = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   // Dados mockup para exemplo
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#FF002E',
   },
   timeTextDark: {
     color: '#5AC8FA',

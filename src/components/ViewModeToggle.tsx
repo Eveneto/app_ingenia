@@ -83,10 +83,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   activeButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF002E',
   },
   activeButtonDark: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF002E',
   },
   buttonText: {
     fontSize: 16,
