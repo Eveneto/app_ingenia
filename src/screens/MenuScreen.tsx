@@ -9,6 +9,7 @@ import {
   Linking,
   ScrollView,
   Alert,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -65,9 +66,49 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
   };
 
   const sponsors = [
-    { name: 'Patrocinador 1', logo: require('../../assets/images/logo-ingenia-2025.png') },
-    { name: 'Patrocinador 2', logo: require('../../assets/images/logo-ingenia-2025.png') },
-    // Adicione mais patrocinadores
+    // OURO
+    { name: 'TPF Engenharia', logo: require('../../assets/images/patrocinadores/tpf-engenharia.png'), category: 'Ouro' },
+    { name: 'Recon Fundações', logo: require('../../assets/images/patrocinadores/recon-logo.jpg'), category: 'Ouro' },
+    { name: 'Gusmão Engenharia', logo: require('../../assets/images/patrocinadores/gpo.png'), category: 'Ouro' },
+    { name: 'Vetorizada', logo: require('../../assets/images/patrocinadores/geosistemas.jpg'), category: 'Ouro' },
+    { name: 'JBR Engenharia', logo: null, category: 'Ouro' },
+    { name: 'Logomarca - Fundações Rossi', logo: require('../../assets/images/patrocinadores/funcacoes_rossi.jpeg'), category: 'Ouro' },
+    { name: 'Bateria Moura', logo: null, category: 'Ouro' },
+    { name: 'Grupo JCPM', logo: null, category: 'Ouro' },
+    { name: 'Construtora Estratégica', logo: null, category: 'Ouro' },
+    
+    // PRATA
+    { name: 'Walter Lopes Pre - Fabricados LTDA', logo: null, category: 'Prata' },
+    { name: 'Logomarcas', logo: null, category: 'Prata' },
+    { name: 'Pré Moldados', logo: null, category: 'Prata' },
+    { name: 'GB Gabriel Bacelar', logo: require('../../assets/images/patrocinadores/gb-gabriel-logo.jpg'), category: 'Prata' },
+    { name: 'Ferreira Costa', logo: null, category: 'Prata' },
+    { name: 'FIEC', logo: null, category: 'Prata' },
+    
+    // BRONZE
+    { name: 'Estratégica Engenharia', logo: require('../../assets/images/patrocinadores/estrategica-logo.jpg'), category: 'Bronze' },
+    { name: 'Colmeia', logo: null, category: 'Bronze' },
+    { name: 'Fundacei', logo: null, category: 'Bronze' },
+    
+    // BRONZE + PALESTRA
+    { name: 'Agrodan', logo: require('../../assets/images/patrocinadores/Agrodan.png'), category: 'Bronze + Palestra' },
+    { name: 'Direcional Engenharia', logo: null, category: 'Bronze + Palestra' },
+    
+    // ESMERALDA
+    { name: 'Logomarca - Pernambuco Construtora', logo: require('../../assets/images/patrocinadores/pe_construtora.png'), category: 'Esmeralda' },
+    { name: 'STAND INGENIA', logo: null, category: 'Esmeralda' },
+    { name: 'VL Construtora', logo: require('../../assets/images/patrocinadores/vl-logo-colorida-01.png'), category: 'Esmeralda' },
+    { name: 'ACLF', logo: require('../../assets/images/patrocinadores/aclf-logo.jpg'), category: 'Esmeralda' },
+    
+    // DIAMANTE
+    { name: 'IAUPE', logo: null, category: 'Diamante' },
+    { name: 'CREA', logo: null, category: 'Diamante' },
+    
+    // CONECTADA + ESTANDE
+    { name: 'Logomarca - Pernambuco Construtora', logo: require('../../assets/images/patrocinadores/pe_construtora.png'), category: 'Conectada + Estande' },
+    
+    // ESSENCIAL
+    { name: 'Direcional Engenharia', logo: null, category: 'Essencial' },
   ];
 
   return (
@@ -150,15 +191,35 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>
             Patrocinadores
           </Text>
-          <View style={styles.sponsorsGrid}>
-            {sponsors.map((sponsor, index) => (
-              <View key={index} style={[styles.sponsorItem, isDarkMode && styles.sponsorItemDark]}>
-                <Text style={[styles.sponsorText, isDarkMode && styles.sponsorTextDark]}>
-                  {sponsor.name}
+          
+          {/* Agrupar por categoria */}
+          {['Ouro', 'Prata', 'Bronze', 'Bronze + Palestra', 'Esmeralda', 'Diamante', 'Conectada + Estande', 'Essencial'].map((category) => {
+            const categorySponsor = sponsors.filter(s => s.category === category);
+            return categorySponsor.length > 0 ? (
+              <View key={category} style={styles.categorySection}>
+                <Text style={[styles.categoryTitle, isDarkMode && styles.categoryTitleDark]}>
+                  {category}
                 </Text>
+                <View style={styles.sponsorsGrid}>
+                  {categorySponsor.map((sponsor, index) => (
+                    <View key={index} style={[styles.sponsorItem, isDarkMode && styles.sponsorItemDark]}>
+                      {sponsor.logo ? (
+                        <Image 
+                          source={sponsor.logo} 
+                          style={styles.sponsorLogo}
+                          resizeMode="contain"
+                        />
+                      ) : (
+                        <Text style={[styles.sponsorText, isDarkMode && styles.sponsorTextDark]}>
+                          {sponsor.name}
+                        </Text>
+                      )}
+                    </View>
+                  ))}
+                </View>
               </View>
-            ))}
-          </View>
+            ) : null;
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -336,6 +397,19 @@ const styles = StyleSheet.create({
   sectionTitleDark: {
     color: '#ffffff',
   },
+  categorySection: {
+    marginBottom: 20,
+  },
+  categoryTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333333',
+    marginBottom: 12,
+    paddingLeft: 8,
+  },
+  categoryTitleDark: {
+    color: '#ffffff',
+  },
   sponsorsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -348,6 +422,8 @@ const styles = StyleSheet.create({
     margin: 8,
     width: '40%',
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 100,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -357,8 +433,12 @@ const styles = StyleSheet.create({
   sponsorItemDark: {
     backgroundColor: '#3c3c3c',
   },
+  sponsorLogo: {
+    width: '100%',
+    height: 80,
+  },
   sponsorText: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
     color: '#333333',
     textAlign: 'center',
