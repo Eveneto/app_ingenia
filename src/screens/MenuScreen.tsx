@@ -19,17 +19,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const handleMapPress = () => {
-    Alert.alert(
-      'Mapa da POLI',
-      'O mapa interativo está sendo ajustado. Por enquanto, acesse:\nhttps://maps.app.goo.gl/FQitJ3u6ykdtNvXWA',
-      [
-        {
-          text: 'Abrir Google Maps',
-          onPress: () => Linking.openURL('https://maps.app.goo.gl/FQitJ3u6ykdtNvXWA'),
-        },
-        { text: 'Fechar', style: 'cancel' },
-      ]
-    );
+    navigation.navigate('Mapa');
   };
 
   const handleInscricao = () => {
@@ -48,7 +38,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     // Abre a câmera do Instagram
     const cameraUrl = 'instagram://camera';
     const webUrl = 'https://www.instagram.com/';
-    
+
     Linking.openURL(cameraUrl).catch(() => {
       // Se falhar, tenta abrir o Instagram
       Linking.openURL('instagram://').catch(() => {
@@ -57,9 +47,15 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           'Instagram',
           'Abra o Instagram e toque no ícone + para criar um Story!',
           [
-            { text: 'Abrir Instagram', onPress: () => Linking.openURL('instagram://').catch(() => Linking.openURL(webUrl)) },
-            { text: 'Cancelar', style: 'cancel' }
-          ]
+            {
+              text: 'Abrir Instagram',
+              onPress: () =>
+                Linking.openURL('instagram://').catch(() =>
+                  Linking.openURL(webUrl),
+                ),
+            },
+            { text: 'Cancelar', style: 'cancel' },
+          ],
         );
       });
     });
@@ -67,52 +63,98 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
 
   const sponsors = [
     // OURO
-    { name: 'TPF Engenharia', logo: require('../../assets/images/patrocinadores/tpf-engenharia.png'), category: 'Ouro' },
-    { name: 'Recon Fundações', logo: require('../../assets/images/patrocinadores/recon-logo.jpg'), category: 'Ouro' },
-    { name: 'Gusmão Engenharia', logo: require('../../assets/images/patrocinadores/gpo.png'), category: 'Ouro' },
-    { name: 'Vetorizada', logo: require('../../assets/images/patrocinadores/geosistemas.jpg'), category: 'Ouro' },
-    { name: 'JBR Engenharia', logo: null, category: 'Ouro' },
-    { name: 'Logomarca - Fundações Rossi', logo: require('../../assets/images/patrocinadores/funcacoes_rossi.jpeg'), category: 'Ouro' },
+    {
+      name: 'TPF Logomarca',
+      logo: require('../../assets/images/patrocinadores/tpf-engenharia.png'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Recon Fundações',
+      logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
+      category: 'Ouro',
+    },
+    { name: 'Pré Moldados', logo: null, category: 'Ouro' },
+    { name: 'Moura Dubeux', logo: null, category: 'Ouro' },
+    {
+      name: 'JBR Engenharia',
+      logo: require('../../assets/images/patrocinadores/jbr.png'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Gusmão Engenharia',
+      logo: require('../../assets/images/patrocinadores/gpo.png'),
+      category: 'Ouro',
+    },
+    {
+      name: 'GeoSistemas',
+      logo: require('../../assets/images/patrocinadores/geosistemas.jpg'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Logomarca - Fundações Rossi',
+      logo: require('../../assets/images/patrocinadores/funcacoes_rossi.jpeg'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Estratégica Engenharia',
+      logo: require('../../assets/images/patrocinadores/estrategica-logo.jpg'),
+      category: 'Ouro',
+    },
     { name: 'Bateria Moura', logo: null, category: 'Ouro' },
     { name: 'Grupo JCPM', logo: null, category: 'Ouro' },
+    { name: 'Ferreira Costa', logo: null, category: 'Ouro' },
     { name: 'Construtora Estratégica', logo: null, category: 'Ouro' },
-    
+
     // PRATA
-    { name: 'Walter Lopes Pre - Fabricados LTDA', logo: null, category: 'Prata' },
-    { name: 'Logomarcas', logo: null, category: 'Prata' },
-    { name: 'Pré Moldados', logo: null, category: 'Prata' },
-    { name: 'GB Gabriel Bacelar', logo: require('../../assets/images/patrocinadores/gb-gabriel-logo.jpg'), category: 'Prata' },
-    { name: 'Ferreira Costa', logo: null, category: 'Prata' },
+    { name: 'Pré Moldados Walter Lopes', logo: null, category: 'Prata' },
+    {
+      name: 'GB Gabriel Bacelar',
+      logo: require('../../assets/images/patrocinadores/gb-gabriel-logo.jpg'),
+      category: 'Prata',
+    },
     { name: 'FIEC', logo: null, category: 'Prata' },
-    
+
     // BRONZE
-    { name: 'Estratégica Engenharia', logo: require('../../assets/images/patrocinadores/estrategica-logo.jpg'), category: 'Bronze' },
     { name: 'Colmeia', logo: null, category: 'Bronze' },
     { name: 'Fundacei', logo: null, category: 'Bronze' },
-    
+
     // BRONZE + PALESTRA
-    { name: 'Agrodan', logo: require('../../assets/images/patrocinadores/Agrodan.png'), category: 'Bronze + Palestra' },
-    { name: 'Direcional Engenharia', logo: null, category: 'Bronze + Palestra' },
-    
+    {
+      name: 'Agrodan',
+      logo: require('../../assets/images/patrocinadores/Agrodan.png'),
+      category: 'Bronze + Palestra',
+    },
+
     // ESMERALDA
-    { name: 'Logomarca - Pernambuco Construtora', logo: require('../../assets/images/patrocinadores/pe_construtora.png'), category: 'Esmeralda' },
-    { name: 'STAND INGENIA', logo: null, category: 'Esmeralda' },
-    { name: 'VL Construtora', logo: require('../../assets/images/patrocinadores/vl-logo-colorida-01.png'), category: 'Esmeralda' },
-    { name: 'ACLF', logo: require('../../assets/images/patrocinadores/aclf-logo.jpg'), category: 'Esmeralda' },
-    
+    {
+      name: 'VL Construtora',
+      logo: require('../../assets/images/patrocinadores/vl-logo-colorida-01.png'),
+      category: 'Esmeralda',
+    },
+    {
+      name: 'ACLF',
+      logo: require('../../assets/images/patrocinadores/aclf-logo.jpg'),
+      category: 'Esmeralda',
+    },
+
     // DIAMANTE
-    { name: 'IAUPE', logo: null, category: 'Diamante' },
     { name: 'CREA', logo: null, category: 'Diamante' },
-    
+
     // CONECTADA + ESTANDE
-    { name: 'Logomarca - Pernambuco Construtora', logo: require('../../assets/images/patrocinadores/pe_construtora.png'), category: 'Conectada + Estande' },
-    
+    {
+      name: 'Pernambuco Construtora',
+      logo: require('../../assets/images/patrocinadores/pe_construtora.png'),
+      category: 'Conectada + Estande',
+    },
+
     // ESSENCIAL
     { name: 'Direcional Engenharia', logo: null, category: 'Essencial' },
   ];
 
   return (
-    <SafeAreaView style={[styles.container, isDarkMode && styles.containerDark]}>
+    <SafeAreaView
+      style={[styles.container, isDarkMode && styles.containerDark]}
+    >
       <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -121,9 +163,16 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           <TouchableOpacity
             style={[styles.button, isDarkMode && styles.buttonDark]}
             onPress={() => navigation.navigate('Programacao')}
-            activeOpacity={0.7}>
-            <Icon name="event-note" size={40} color={isDarkMode ? '#5AC8FA' : '#FF002E'} />
-            <Text style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}>
+            activeOpacity={0.7}
+          >
+            <Icon
+              name="event-note"
+              size={40}
+              color={isDarkMode ? '#5AC8FA' : '#FF002E'}
+            />
+            <Text
+              style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}
+            >
               Programação
             </Text>
           </TouchableOpacity>
@@ -131,9 +180,16 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           <TouchableOpacity
             style={[styles.button, isDarkMode && styles.buttonDark]}
             onPress={handleMapPress}
-            activeOpacity={0.7}>
-            <Icon name="map" size={40} color={isDarkMode ? '#5AC8FA' : '#FF002E'} />
-            <Text style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}>
+            activeOpacity={0.7}
+          >
+            <Icon
+              name="map"
+              size={40}
+              color={isDarkMode ? '#5AC8FA' : '#FF002E'}
+            />
+            <Text
+              style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}
+            >
               Mapa
             </Text>
           </TouchableOpacity>
@@ -141,23 +197,34 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           <TouchableOpacity
             style={[styles.button, isDarkMode && styles.buttonDark]}
             onPress={handleInscricao}
-            activeOpacity={0.7}>
-            <Icon name="link" size={40} color={isDarkMode ? '#5AC8FA' : '#FF002E'} />
-            <Text style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}>
+            activeOpacity={0.7}
+          >
+            <Icon
+              name="link"
+              size={40}
+              color={isDarkMode ? '#5AC8FA' : '#FF002E'}
+            />
+            <Text
+              style={[styles.buttonText, isDarkMode && styles.buttonTextDark]}
+            >
               Inscrição
             </Text>
           </TouchableOpacity>
         </View>
 
         {/* Card Instagram */}
-        <View style={[styles.instagramCard, isDarkMode && styles.instagramCardDark]}>
+        <View
+          style={[styles.instagramCard, isDarkMode && styles.instagramCardDark]}
+        >
           <View style={styles.instagramHeader}>
             <IconCommunity name="instagram" size={48} color="#E4405F" />
             <Text style={styles.instagramTitle}>Compartilhe no Instagram!</Text>
           </View>
-          
+
           <View style={styles.instagramCaptionBox}>
-            <Text style={styles.instagramCaptionLabel}>📝 Exemplo de legenda:</Text>
+            <Text style={styles.instagramCaptionLabel}>
+              📝 Exemplo de legenda:
+            </Text>
             <Text style={styles.instagramCaption}>
               Participando do Ingenia 2025! 🚀{'\n'}
               Um evento incrível de inovação e tecnologia na POLI-UPE! 💡✨
@@ -166,20 +233,22 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
               #Ingenia2025 #POLIUPE #Inovação #Tecnologia #EventoTech #Recife
             </Text>
           </View>
-          
+
           <View style={styles.instagramButtons}>
             <TouchableOpacity
               style={styles.instagramButton}
               onPress={handleInstagramFeed}
-              activeOpacity={0.7}>
+              activeOpacity={0.7}
+            >
               <IconCommunity name="image-multiple" size={24} color="#ffffff" />
               <Text style={styles.instagramButtonText}>Postar no Feed</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={[styles.instagramButton, styles.instagramButtonStories]}
               onPress={handleInstagramStories}
-              activeOpacity={0.7}>
+              activeOpacity={0.7}
+            >
               <IconCommunity name="image-plus" size={24} color="#ffffff" />
               <Text style={styles.instagramButtonText}>Criar Story</Text>
             </TouchableOpacity>
@@ -188,29 +257,58 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
 
         {/* Patrocinadores */}
         <View style={styles.sponsorsContainer}>
-          <Text style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}>
+          <Text
+            style={[styles.sectionTitle, isDarkMode && styles.sectionTitleDark]}
+          >
             Patrocinadores
           </Text>
-          
+
           {/* Agrupar por categoria */}
-          {['Ouro', 'Prata', 'Bronze', 'Bronze + Palestra', 'Esmeralda', 'Diamante', 'Conectada + Estande', 'Essencial'].map((category) => {
-            const categorySponsor = sponsors.filter(s => s.category === category);
+          {[
+            'Ouro',
+            'Prata',
+            'Bronze',
+            'Bronze + Palestra',
+            'Esmeralda',
+            'Diamante',
+            'Conectada + Estande',
+            'Essencial',
+          ].map(category => {
+            const categorySponsor = sponsors.filter(
+              s => s.category === category && s.logo !== null,
+            );
             return categorySponsor.length > 0 ? (
               <View key={category} style={styles.categorySection}>
-                <Text style={[styles.categoryTitle, isDarkMode && styles.categoryTitleDark]}>
+                <Text
+                  style={[
+                    styles.categoryTitle,
+                    isDarkMode && styles.categoryTitleDark,
+                  ]}
+                >
                   {category}
                 </Text>
                 <View style={styles.sponsorsGrid}>
                   {categorySponsor.map((sponsor, index) => (
-                    <View key={index} style={[styles.sponsorItem, isDarkMode && styles.sponsorItemDark]}>
+                    <View
+                      key={index}
+                      style={[
+                        styles.sponsorItem,
+                        isDarkMode && styles.sponsorItemDark,
+                      ]}
+                    >
                       {sponsor.logo ? (
-                        <Image 
-                          source={sponsor.logo} 
+                        <Image
+                          source={sponsor.logo}
                           style={styles.sponsorLogo}
                           resizeMode="contain"
                         />
                       ) : (
-                        <Text style={[styles.sponsorText, isDarkMode && styles.sponsorTextDark]}>
+                        <Text
+                          style={[
+                            styles.sponsorText,
+                            isDarkMode && styles.sponsorTextDark,
+                          ]}
+                        >
                           {sponsor.name}
                         </Text>
                       )}

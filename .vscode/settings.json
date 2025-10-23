@@ -18,5 +18,7 @@
   },
   "react-native-tools.logLevel": "Debug",
   "react-native-tools.showUserTips": false,
-  "react-native-tools.packager.port": 8081
+  "react-native-tools.packager.port": 8081,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
