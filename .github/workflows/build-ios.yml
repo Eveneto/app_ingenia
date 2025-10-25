@@ -27,6 +27,12 @@ jobs:
       - name: Install CocoaPods
         run: cd ios && pod install
 
+      - name: Disable code signing
+        run: |
+          cd ios
+          sed -i '' 's/DEVELOPMENT_TEAM = .*;/DEVELOPMENT_TEAM = "";/g' AppIngenia.xcodeproj/project.pbxproj
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' AppIngenia.xcodeproj/project.pbxproj
+
       - name: Build iOS
         run: |
           cd ios
