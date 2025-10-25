@@ -39,7 +39,7 @@ jobs:
           export CODE_SIGN_IDENTITY=""
           export CODE_SIGNING_REQUIRED=NO
           export CODE_SIGNING_ALLOWED=NO
-          xcodebuild -workspace AppIngenia.xcworkspace -scheme AppIngenia -configuration Release -archivePath AppIngenia.xcarchive archive
+          xcodebuild -workspace AppIngenia.xcworkspace -scheme AppIngenia -configuration Release -archivePath AppIngenia.xcarchive archive -allowProvisioningUpdates
 
       - name: Export IPA
         run: |
