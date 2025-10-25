@@ -69,6 +69,7 @@ jobs:
         run: npm install
 
       - name: Setup Java
+        id: setup-java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -78,6 +79,8 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Build Android APK
+        env:
+          GRADLE_OPTS: -Dorg.gradle.java.home=${{ steps.setup-java.outputs.path }}
         run: |
           cd android
           chmod +x gradlew
