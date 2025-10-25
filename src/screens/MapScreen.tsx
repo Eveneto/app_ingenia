@@ -58,11 +58,7 @@ const MapScreen: React.FC = () => {
               >
                 {location.name}
               </Text>
-              <View
-                style={[
-                  styles.buttonContainer,
-                ]}
-              >
+              <View style={[styles.buttonContainer]}>
                 <Icon
                   name="open-in-new"
                   size={20}

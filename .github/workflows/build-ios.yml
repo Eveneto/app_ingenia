@@ -1,0 +1,44 @@
+name: Build iOS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install CocoaPods
+        run: cd ios && pod install
+
+      - name: Build iOS
+        run: |
+          cd ios
+          xcodebuild -workspace AppIngenia.xcworkspace -scheme AppIngenia -configuration Release -archivePath AppIngenia.xcarchive archive
+
+      - name: Export IPA
+        run: |
+          cd ios
+          xcodebuild -exportArchive -archivePath AppIngenia.xcarchive -exportOptionsPlist exportOptions.plist -exportPath .
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: AppIngenia-iOS
+          path: ios/AppIngenia.ipa
