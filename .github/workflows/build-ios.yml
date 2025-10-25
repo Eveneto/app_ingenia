@@ -30,6 +30,9 @@ jobs:
       - name: Build iOS
         run: |
           cd ios
+          export CODE_SIGN_IDENTITY=""
+          export CODE_SIGNING_REQUIRED=NO
+          export CODE_SIGNING_ALLOWED=NO
           xcodebuild -workspace AppIngenia.xcworkspace -scheme AppIngenia -configuration Release -archivePath AppIngenia.xcarchive archive
 
       - name: Export IPA
