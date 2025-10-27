@@ -19,7 +19,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const handleMapPress = () => {
-    navigation.navigate('Mapa');
+    Linking.openURL('https://serdigital.com.br/ingenia/mapa_poli.pdf');
   };
 
   const handleInscricao = () => {
@@ -70,7 +70,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     },
     {
       name: 'Recon Fundações',
-      logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
+      logo: null,
       category: 'Ouro',
     },
     { name: 'Pré Moldados', logo: null, category: 'Ouro' },
@@ -194,7 +194,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={[styles.button, isDarkMode && styles.buttonDark]}
-            onPress={() => navigation.navigate('Programacao')}
+            onPress={() => Linking.openURL('https://docs.google.com/spreadsheets/d/1_xM69SMz_PI2xGCk7OZdmQhvX1sWwhw60444UzWwIMU/edit?usp=sharing')}
             activeOpacity={0.7}
           >
             <Icon

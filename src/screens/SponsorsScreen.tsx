@@ -54,7 +54,7 @@ const SponsorsScreen: React.FC = () => {
         },
         {
           name: 'Recon Fundações',
-          logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
+          logo: null,
         },
         {
           name: 'GB Gabriel Bacelar Construções',
