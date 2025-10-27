@@ -65,12 +65,12 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     // OURO
     {
       name: 'TPF Logomarca',
-      logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.png'),
+      logo: null,
       category: 'Ouro',
     },
     {
       name: 'Recon Fundações',
-      logo: require('../../assets/images/patrocinadores/Recon.png'),
+      logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
       category: 'Ouro',
     },
     { name: 'Pré Moldados', logo: null, category: 'Ouro' },

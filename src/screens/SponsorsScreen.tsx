@@ -20,7 +20,7 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'TPF Engenharia',
-          logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.png'),
+          logo: null,
         },
         {
           name: 'JBR Engenharia',
@@ -54,7 +54,7 @@ const SponsorsScreen: React.FC = () => {
         },
         {
           name: 'Recon Fundações',
-          logo: require('../../assets/images/patrocinadores/Recon.png'),
+          logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
         },
         {
           name: 'GB Gabriel Bacelar Construções',
