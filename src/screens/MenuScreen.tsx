@@ -65,90 +65,122 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     // OURO
     {
       name: 'TPF Logomarca',
-      logo: require('../../assets/images/patrocinadores/tpf-engenharia.png'),
+      logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.svg'),
       category: 'Ouro',
     },
     {
       name: 'Recon Fundações',
-      logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
+      logo: require('../../assets/images/patrocinadores/Recon.svg'),
       category: 'Ouro',
     },
     { name: 'Pré Moldados', logo: null, category: 'Ouro' },
-    { name: 'Moura Dubeux', logo: null, category: 'Ouro' },
+    {
+      name: 'Moura Dubeux',
+      logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.svg'),
+      category: 'Ouro',
+    },
     {
       name: 'JBR Engenharia',
-      logo: require('../../assets/images/patrocinadores/jbr.png'),
+      logo: require('../../assets/images/patrocinadores/JBR.svg'),
       category: 'Ouro',
     },
     {
       name: 'Gusmão Engenharia',
-      logo: require('../../assets/images/patrocinadores/gpo.png'),
+      logo: require('../../assets/images/patrocinadores/LOGO_GPO-HORIZONTAL_VETOR.svg'),
       category: 'Ouro',
     },
     {
       name: 'GeoSistemas',
-      logo: require('../../assets/images/patrocinadores/geosistemas.jpg'),
+      logo: require('../../assets/images/patrocinadores/Logo-GEO-atual-v2.svg'),
       category: 'Ouro',
     },
     {
       name: 'Logomarca - Fundações Rossi',
-      logo: require('../../assets/images/patrocinadores/funcacoes_rossi.jpeg'),
+      logo: require('../../assets/images/patrocinadores/LOGO-FUNDACOES-ROSSI.svg'),
       category: 'Ouro',
     },
     {
       name: 'Estratégica Engenharia',
-      logo: require('../../assets/images/patrocinadores/estrategica-logo.jpg'),
+      logo: require('../../assets/images/patrocinadores/Estratégica-Logo.svg'),
       category: 'Ouro',
     },
-    { name: 'Bateria Moura', logo: null, category: 'Ouro' },
-    { name: 'Grupo JCPM', logo: null, category: 'Ouro' },
-    { name: 'Ferreira Costa', logo: null, category: 'Ouro' },
+    {
+      name: 'Bateria Moura',
+      logo: require('../../assets/images/patrocinadores/Baterias Moura.svg'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Grupo JCPM',
+      logo: require('../../assets/images/patrocinadores/JPC_000124_90 ANOS F MARCA_APROV_Slogan_00001.svg'),
+      category: 'Ouro',
+    },
+    {
+      name: 'Ferreira Costa',
+      logo: require('../../assets/images/patrocinadores/FerreiraCostsa.svg'),
+      category: 'Ouro',
+    },
     { name: 'Construtora Estratégica', logo: null, category: 'Ouro' },
 
     // PRATA
-    { name: 'Pré Moldados Walter Lopes', logo: null, category: 'Prata' },
+    {
+      name: 'Pré Moldados Walter Lopes',
+      logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.svg'),
+      category: 'Prata',
+    },
     {
       name: 'GB Gabriel Bacelar',
-      logo: require('../../assets/images/patrocinadores/gb-gabriel-logo.jpg'),
+      logo: require('../../assets/images/patrocinadores/GB GABRIEL - Logo GB.svg'),
       category: 'Prata',
     },
     { name: 'FIEC', logo: null, category: 'Prata' },
 
     // BRONZE
-    { name: 'Colmeia', logo: null, category: 'Bronze' },
+    {
+      name: 'Colmeia',
+      logo: require('../../assets/images/patrocinadores/Colmeia.svg'),
+      category: 'Bronze',
+    },
     { name: 'Fundacei', logo: null, category: 'Bronze' },
 
     // BRONZE + PALESTRA
     {
       name: 'Agrodan',
-      logo: require('../../assets/images/patrocinadores/Agrodan.png'),
+      logo: require('../../assets/images/patrocinadores/Logo Agrodan.svg'),
       category: 'Bronze + Palestra',
     },
 
     // ESMERALDA
     {
       name: 'VL Construtora',
-      logo: require('../../assets/images/patrocinadores/vl-logo-colorida-01.png'),
+      logo: require('../../assets/images/patrocinadores/LOGO-VL-CONSTRUTORA.svg'),
       category: 'Esmeralda',
     },
     {
       name: 'ACLF',
-      logo: require('../../assets/images/patrocinadores/aclf-logo.jpg'),
+      logo: require('../../assets/images/patrocinadores/ACLF-logo-horizontal.svg'),
       category: 'Esmeralda',
     },
 
     // DIAMANTE
-    { name: 'CREA', logo: null, category: 'Diamante' },
+    {
+      name: 'CREA',
+      logo: require('../../assets/images/patrocinadores/CREA.svg'),
+      category: 'Diamante',
+    },
 
     // CONECTADA + ESTANDE
     {
       name: 'Pernambuco Construtora',
-      logo: require('../../assets/images/patrocinadores/pe_construtora.png'),
+      logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.svg'),
       category: 'Conectada + Estande',
     },
 
     // ESSENCIAL
-    { name: 'Direcional Engenharia', logo: null, category: 'Essencial' },
+    {
+      name: 'Direcional Engenharia',
+      logo: require('../../assets/images/patrocinadores/502.57_LOGO DIRECIONAL_COR_V3F.svg'),
+      category: 'Essencial',
+    },
   ];
 
   return (

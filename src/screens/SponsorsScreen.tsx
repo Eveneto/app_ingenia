@@ -19,25 +19,25 @@ const SponsorsScreen: React.FC = () => {
       category: 'Ouro',
       color: '#FFD700',
       sponsors: [
-        { 
-          name: 'TPF Engenharia', 
-          logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.svg')
+        {
+          name: 'TPF Engenharia',
+          logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.svg'),
         },
-        { 
-          name: 'JBR Engenharia', 
-          logo: require('../../assets/images/patrocinadores/JBR.svg')
+        {
+          name: 'JBR Engenharia',
+          logo: require('../../assets/images/patrocinadores/JBR.svg'),
         },
-        { 
-          name: 'Gusmão Engenharia', 
-          logo: require('../../assets/images/patrocinadores/LOGO_GPO-HORIZONTAL_VETOR.svg')
+        {
+          name: 'Gusmão Engenharia',
+          logo: require('../../assets/images/patrocinadores/LOGO_GPO-HORIZONTAL_VETOR.svg'),
         },
-        { 
-          name: 'GeoSistemas', 
-          logo: require('../../assets/images/patrocinadores/Logo-GEO-atual-v2.svg')
+        {
+          name: 'GeoSistemas',
+          logo: require('../../assets/images/patrocinadores/Logo-GEO-atual-v2.svg'),
         },
-        { 
-          name: 'Fundações Rossi', 
-          logo: require('../../assets/images/patrocinadores/LOGO-FUNDACOES-ROSSI.svg')
+        {
+          name: 'Fundações Rossi',
+          logo: require('../../assets/images/patrocinadores/LOGO-FUNDACOES-ROSSI.svg'),
         },
       ],
     },
@@ -45,21 +45,21 @@ const SponsorsScreen: React.FC = () => {
       category: 'Prata',
       color: '#C0C0C0',
       sponsors: [
-        { 
-          name: 'Pré Moldados Walter Lopes', 
-          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.svg')
+        {
+          name: 'Pré Moldados Walter Lopes',
+          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.svg'),
         },
-        { 
-          name: 'Pré Moldados', 
-          logo: null
+        {
+          name: 'Pré Moldados',
+          logo: null,
         },
-        { 
-          name: 'Recon Fundações', 
-          logo: require('../../assets/images/patrocinadores/Recon.svg')
+        {
+          name: 'Recon Fundações',
+          logo: require('../../assets/images/patrocinadores/Recon.svg'),
         },
-        { 
-          name: 'GB Gabriel Bacelar Construções', 
-          logo: require('../../assets/images/patrocinadores/GB GABRIEL - Logo GB.svg')
+        {
+          name: 'GB Gabriel Bacelar Construções',
+          logo: require('../../assets/images/patrocinadores/GB GABRIEL - Logo GB.svg'),
         },
       ],
     },
@@ -67,13 +67,13 @@ const SponsorsScreen: React.FC = () => {
       category: 'Bronze',
       color: '#CD7F32',
       sponsors: [
-        { 
-          name: 'Estratégica Engenharia', 
-          logo: require('../../assets/images/patrocinadores/Estratégica-Logo.svg')
+        {
+          name: 'Estratégica Engenharia',
+          logo: require('../../assets/images/patrocinadores/Estratégica-Logo.svg'),
         },
-        { 
-          name: 'Colmeia', 
-          logo: require('../../assets/images/patrocinadores/Colmeia.svg')
+        {
+          name: 'Colmeia',
+          logo: require('../../assets/images/patrocinadores/Colmeia.svg'),
         },
       ],
     },
@@ -81,9 +81,9 @@ const SponsorsScreen: React.FC = () => {
       category: 'Bronze + Palestra',
       color: '#CD7F32',
       sponsors: [
-        { 
-          name: 'Agrodan', 
-          logo: require('../../assets/images/patrocinadores/Logo Agrodan.svg')
+        {
+          name: 'Agrodan',
+          logo: require('../../assets/images/patrocinadores/Logo Agrodan.svg'),
         },
       ],
     },
@@ -91,17 +91,17 @@ const SponsorsScreen: React.FC = () => {
       category: 'Esmeralda',
       color: '#50C878',
       sponsors: [
-        { 
-          name: 'VL Construtora', 
-          logo: require('../../assets/images/patrocinadores/LOGO-VL-CONSTRUTORA.svg')
+        {
+          name: 'VL Construtora',
+          logo: require('../../assets/images/patrocinadores/LOGO-VL-CONSTRUTORA.svg'),
         },
-        { 
-          name: 'Moura Dubex', 
-          logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.svg')
+        {
+          name: 'Moura Dubex',
+          logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.svg'),
         },
-        { 
-          name: 'ACLF', 
-          logo: require('../../assets/images/patrocinadores/ACLF-logo-horizontal.svg')
+        {
+          name: 'ACLF',
+          logo: require('../../assets/images/patrocinadores/ACLF-logo-horizontal.svg'),
         },
       ],
     },
@@ -109,13 +109,13 @@ const SponsorsScreen: React.FC = () => {
       category: 'Diamante',
       color: '#B9F2FF',
       sponsors: [
-        { 
-          name: 'IAUPE', 
-          logo: require('../../assets/images/patrocinadores/IAUPE.png')
+        {
+          name: 'IAUPE',
+          logo: require('../../assets/images/patrocinadores/IAUPE.png'),
         },
-        { 
-          name: 'CREA', 
-          logo: require('../../assets/images/patrocinadores/CREA.svg')
+        {
+          name: 'CREA',
+          logo: require('../../assets/images/patrocinadores/CREA.svg'),
         },
       ],
     },
@@ -123,16 +123,18 @@ const SponsorsScreen: React.FC = () => {
       category: 'Conectada + Estande',
       color: '#4169E1',
       sponsors: [
-        { 
-          name: 'Pernambuco Construtora', 
-          logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.svg')
+        {
+          name: 'Pernambuco Construtora',
+          logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.svg'),
         },
       ],
     },
   ];
 
   return (
-    <SafeAreaView style={[styles.container, isDarkMode && styles.containerDark]}>
+    <SafeAreaView
+      style={[styles.container, isDarkMode && styles.containerDark]}
+    >
       <Header />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={[styles.title, isDarkMode && styles.titleDark]}>
@@ -141,21 +143,42 @@ const SponsorsScreen: React.FC = () => {
         {sponsorCategories.map((category, categoryIndex) => (
           <View key={categoryIndex} style={styles.categorySection}>
             <View style={styles.categoryHeader}>
-              <View style={[styles.categoryBadge, { backgroundColor: category.color }]} />
-              <Text style={[styles.categoryTitle, isDarkMode && styles.categoryTitleDark]}>
+              <View
+                style={[
+                  styles.categoryBadge,
+                  { backgroundColor: category.color },
+                ]}
+              />
+              <Text
+                style={[
+                  styles.categoryTitle,
+                  isDarkMode && styles.categoryTitleDark,
+                ]}
+              >
                 {category.category}
               </Text>
             </View>
             {category.sponsors.map((sponsor, sponsorIndex) => (
-              <View key={sponsorIndex} style={[styles.sponsorCard, isDarkMode && styles.sponsorCardDark]}>
+              <View
+                key={sponsorIndex}
+                style={[
+                  styles.sponsorCard,
+                  isDarkMode && styles.sponsorCardDark,
+                ]}
+              >
                 {sponsor.logo ? (
-                  <Image 
-                    source={sponsor.logo} 
+                  <Image
+                    source={sponsor.logo}
                     style={styles.sponsorLogo}
                     resizeMode="contain"
                   />
                 ) : (
-                  <Text style={[styles.sponsorName, isDarkMode && styles.sponsorNameDark]}>
+                  <Text
+                    style={[
+                      styles.sponsorName,
+                      isDarkMode && styles.sponsorNameDark,
+                    ]}
+                  >
                     {sponsor.name}
                   </Text>
                 )}
