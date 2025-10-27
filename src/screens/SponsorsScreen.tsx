@@ -8,7 +8,6 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { SvgUri } from 'react-native-svg';
 import Header from '../components/Header';
 
 const SponsorsScreen: React.FC = () => {
@@ -21,23 +20,23 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'TPF Engenharia',
-          logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.svg'),
+          logo: require('../../assets/images/patrocinadores/Vetor-LOGO-TPF-ENGENHARIA-2.png'),
         },
         {
           name: 'JBR Engenharia',
-          logo: require('../../assets/images/patrocinadores/JBR.svg'),
+          logo: require('../../assets/images/patrocinadores/JBR.png'),
         },
         {
           name: 'Gusmão Engenharia',
-          logo: require('../../assets/images/patrocinadores/LOGO_GPO-HORIZONTAL_VETOR.svg'),
+          logo: require('../../assets/images/patrocinadores/LOGO_GPO-HORIZONTAL_VETOR.png'),
         },
         {
           name: 'GeoSistemas',
-          logo: require('../../assets/images/patrocinadores/Logo-GEO-atual-v2.svg'),
+          logo: require('../../assets/images/patrocinadores/Logo-GEO-atual-v2.png'),
         },
         {
           name: 'Fundações Rossi',
-          logo: require('../../assets/images/patrocinadores/LOGO-FUNDACOES-ROSSI.svg'),
+          logo: require('../../assets/images/patrocinadores/LOGO-FUNDACOES-ROSSI.png'),
         },
       ],
     },
@@ -47,7 +46,7 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'Pré Moldados Walter Lopes',
-          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.svg'),
+          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.png'),
         },
         {
           name: 'Pré Moldados',
@@ -55,11 +54,11 @@ const SponsorsScreen: React.FC = () => {
         },
         {
           name: 'Recon Fundações',
-          logo: require('../../assets/images/patrocinadores/Recon.svg'),
+          logo: require('../../assets/images/patrocinadores/Recon.png'),
         },
         {
           name: 'GB Gabriel Bacelar Construções',
-          logo: require('../../assets/images/patrocinadores/GB GABRIEL - Logo GB.svg'),
+          logo: require('../../assets/images/patrocinadores/GB GABRIEL - Logo GB.png'),
         },
       ],
     },
@@ -69,11 +68,11 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'Estratégica Engenharia',
-          logo: require('../../assets/images/patrocinadores/Estratégica-Logo.svg'),
+          logo: require('../../assets/images/patrocinadores/Estratégica-Logo.png'),
         },
         {
           name: 'Colmeia',
-          logo: require('../../assets/images/patrocinadores/Colmeia.svg'),
+          logo: require('../../assets/images/patrocinadores/Colmeia.png'),
         },
       ],
     },
@@ -83,7 +82,7 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'Agrodan',
-          logo: require('../../assets/images/patrocinadores/Logo Agrodan.svg'),
+          logo: require('../../assets/images/patrocinadores/Logo Agrodan.png'),
         },
       ],
     },
@@ -93,15 +92,15 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'VL Construtora',
-          logo: require('../../assets/images/patrocinadores/LOGO-VL-CONSTRUTORA.svg'),
+          logo: require('../../assets/images/patrocinadores/LOGO-VL-CONSTRUTORA.png'),
         },
         {
           name: 'Moura Dubex',
-          logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.svg'),
+          logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.png'),
         },
         {
           name: 'ACLF',
-          logo: require('../../assets/images/patrocinadores/ACLF-logo-horizontal.svg'),
+          logo: require('../../assets/images/patrocinadores/ACLF-logo-horizontal.png'),
         },
       ],
     },
@@ -115,7 +114,7 @@ const SponsorsScreen: React.FC = () => {
         },
         {
           name: 'CREA',
-          logo: require('../../assets/images/patrocinadores/CREA.svg'),
+          logo: require('../../assets/images/patrocinadores/CREA.png'),
         },
       ],
     },
@@ -125,7 +124,7 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'Pernambuco Construtora',
-          logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.svg'),
+          logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.png'),
         },
       ],
     },
