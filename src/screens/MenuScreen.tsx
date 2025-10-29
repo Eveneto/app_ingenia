@@ -10,6 +10,7 @@ import {
   ScrollView,
   Alert,
   Image,
+  NativeModules,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -77,7 +78,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     {
       name: 'Moura Dubeux',
       logo: require('../../assets/images/patrocinadores/Logo-Moura-Dubeux.png'),
-      category: 'Ouro',
+      category: 'Esmeralda',
     },
     {
       name: 'JBR Engenharia',
@@ -117,15 +118,28 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
     {
       name: 'Ferreira Costa',
       logo: require('../../assets/images/patrocinadores/FerreiraCostsa.png'),
-      category: 'Ouro',
+      category: 'Prata',
     },
+
+    {
+      name: 'Fitec Labs',
+      logo: require('../../assets/images/patrocinadores/Fitec.png'),
+      category: 'Prata',
+    },
+
+    {
+      name: 'Recon',
+      logo: require('../../assets/images/patrocinadores/Recon.png'),
+      category: 'Prata',
+    },
+
     { name: 'Construtora Estratégica', logo: null, category: 'Ouro' },
 
     // PRATA
     {
       name: 'Pré Moldados Walter Lopes',
       logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.png'),
-      category: 'Prata',
+      category: 'Bronze',
     },
     {
       name: 'GB Gabriel Bacelar',
@@ -140,13 +154,17 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
       logo: require('../../assets/images/patrocinadores/Colmeia.png'),
       category: 'Bronze',
     },
-    { name: 'Fundacei', logo: null, category: 'Bronze' },
+    {
+      name: 'Fundações Especiais',
+      logo: require('../../assets/images/patrocinadores/FE.png'),
+      category: 'Bronze',
+    },
 
     // BRONZE + PALESTRA
     {
       name: 'Agrodan',
       logo: require('../../assets/images/patrocinadores/Logo Agrodan.png'),
-      category: 'Bronze + Palestra',
+      category: 'Bronze',
     },
 
     // ESMERALDA
@@ -168,18 +186,64 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
       category: 'Diamante',
     },
 
-    // CONECTADA + ESTANDE
     {
       name: 'Pernambuco Construtora',
       logo: require('../../assets/images/patrocinadores/PernambucoConstrutora.png'),
-      category: 'Conectada + Estande',
+      category: 'Ouro',
     },
 
-    // ESSENCIAL
     {
       name: 'Direcional Engenharia',
       logo: require('../../assets/images/patrocinadores/502.57_LOGO DIRECIONAL_COR_V3F.png'),
-      category: 'Essencial',
+      category: 'Prata',
+    },
+
+    {
+      name: 'Iaupe',
+      logo: require('../../assets/images/patrocinadores/IAUPE.png'),
+      category: 'Apoio Institucional',
+    },
+
+    {
+      name: 'Sebrae',
+      logo: require('../../assets/images/patrocinadores/SEBRAE.png'),
+      category: 'Apoio Institucional',
+    },
+
+    {
+      name: 'Poli Junior',
+      logo: require('../../assets/images/patrocinadores/polijr.png'),
+      category: 'Apoio Institucional',
+    },
+
+    {
+      name: 'Bokus',
+      logo: require('../../assets/images/patrocinadores/bokus.png'),
+      category: 'Apoio',
+    },
+
+    {
+      name: 'Ambev',
+      logo: require('../../assets/images/patrocinadores/ambev.png'),
+      category: 'Apoio',
+    },
+
+    {
+      name: 'Grupo Equation',
+      logo: require('../../assets/images/patrocinadores/EquationLogo.png'),
+      category: 'Apoio',
+    },
+
+    {
+      name: 'Ser Digital',
+      logo: require('../../assets/images/patrocinadores/SD.png'),
+      category: 'Organização',
+    },
+
+    {
+      name: 'Meritus',
+      logo: require('../../assets/images/patrocinadores/meritus.png'),
+      category: 'Organização',
     },
   ];
 
@@ -301,14 +365,14 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
 
           {/* Agrupar por categoria */}
           {[
+            'Diamante',
+            'Esmeralda',
             'Ouro',
             'Prata',
             'Bronze',
-            'Bronze + Palestra',
-            'Esmeralda',
-            'Diamante',
-            'Conectada + Estande',
-            'Essencial',
+            'Apoio Institucional',
+            'Apoio',
+            'Organização',
           ].map(category => {
             const categorySponsor = sponsors.filter(
               s => s.category === category && s.logo !== null,

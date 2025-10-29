@@ -46,7 +46,7 @@ const SponsorsScreen: React.FC = () => {
       sponsors: [
         {
           name: 'Pré Moldados Walter Lopes',
-          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.png'),
+          logo: require('../../assets/images/patrocinadores/Logo WL - Pré-fabricados.svg'),
         },
         {
           name: 'Pré Moldados',

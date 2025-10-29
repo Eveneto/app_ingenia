@@ -25,65 +25,74 @@ const HomeScreen: React.FC = () => {
     {
       name: 'TPF Engenharia',
       logo: require('../../assets/images/patrocinadores/tpf-engenharia.png'),
-      category: 'Ouro'
+      category: 'Ouro',
     },
     {
       name: 'Gusmão Engenharia',
       logo: require('../../assets/images/patrocinadores/gpo.png'),
-      category: 'Ouro'
+      category: 'Ouro',
     },
     {
       name: 'GeoSistemas',
       logo: require('../../assets/images/patrocinadores/geosistemas.jpg'),
-      category: 'Ouro'
+      category: 'Ouro',
     },
     {
       name: 'Fundações Rossi',
       logo: require('../../assets/images/patrocinadores/funcacoes_rossi.jpeg'),
-      category: 'Ouro'
+      category: 'Ouro',
     },
     {
       name: 'Recon Fundações',
       logo: require('../../assets/images/patrocinadores/recon-logo.jpg'),
-      category: 'Prata'
+      category: 'Prata',
     },
     {
       name: 'GB Gabriel Bacelar',
       logo: require('../../assets/images/patrocinadores/gb-gabriel-logo.jpg'),
-      category: 'Prata'
+      category: 'Prata',
     },
     {
       name: 'Estratégica Engenharia',
       logo: require('../../assets/images/patrocinadores/estrategica-logo.jpg'),
-      category: 'Bronze'
+      category: 'Bronze',
     },
     {
       name: 'Agrodan',
       logo: require('../../assets/images/patrocinadores/Agrodan.png'),
-      category: 'Bronze + Palestra'
+      category: 'Bronze + Palestra',
     },
     {
       name: 'VL Construtora',
       logo: require('../../assets/images/patrocinadores/vl-logo-colorida-01.png'),
-      category: 'Esmeralda'
+      category: 'Esmeralda',
     },
     {
       name: 'ACLF',
       logo: require('../../assets/images/patrocinadores/aclf-logo.jpg'),
-      category: 'Esmeralda'
+      category: 'Esmeralda',
     },
     {
       name: 'Pernambuco Construtora',
       logo: require('../../assets/images/patrocinadores/pe_construtora.png'),
-      category: 'Conectada + Estande'
+      category: 'Conectada + Estande',
     },
   ];
 
   const getDayInfo = (day: number) => {
     const dates = {
-      1: { date: '29 de Outubro, 2025', description: 'DIA 1 - Abertura e Palestras' },
-      2: { date: '30 de Outubro, 2025', description: 'DIA 2 - Workshops e Exposições' },
-      3: { date: '31 de Outubro, 2025', description: 'DIA 3 - Feira de Estágios e Encerramento' },
+      1: {
+        date: '29 de Outubro, 2025',
+        description: 'DIA 1 - Abertura e Palestras',
+      },
+      2: {
+        date: '30 de Outubro, 2025',
+        description: 'DIA 2 - Workshops e Exposições',
+      },
+      3: {
+        date: '31 de Outubro, 2025',
+        description: 'DIA 3 - Feira de Estágios e Encerramento',
+      },
     };
     return dates[day as keyof typeof dates] || dates[1];
   };
@@ -94,38 +103,50 @@ const HomeScreen: React.FC = () => {
   const dayEvents = events.filter(event => event.day === selectedDay);
 
   return (
-    <SafeAreaView style={[styles.container, isDarkMode && styles.containerDark]}>
+    <SafeAreaView
+      style={[styles.container, isDarkMode && styles.containerDark]}
+    >
       <Header />
-      
+
       <ScrollView>
-        <View style={[styles.dateContainer, isDarkMode && styles.dateContainerDark]}>
+        <View
+          style={[styles.dateContainer, isDarkMode && styles.dateContainerDark]}
+        >
           <Text style={[styles.dateText, isDarkMode && styles.dateTextDark]}>
             {currentDayInfo.date}
           </Text>
-          <Text style={[styles.subtitleText, isDarkMode && styles.subtitleTextDark]}>
+          <Text
+            style={[styles.subtitleText, isDarkMode && styles.subtitleTextDark]}
+          >
             {currentDayInfo.description}
           </Text>
-          
+
           {/* Botões de navegação por dia - apenas para visualização de tabela */}
           {viewMode === 'table' && (
             <View style={styles.daySelector}>
-              {[1, 2, 3].map((day) => (
+              {[1, 2, 3].map(day => (
                 <TouchableOpacity
                   key={day}
                   style={[
                     styles.dayButton,
                     selectedDay === day && styles.dayButtonActive,
                     isDarkMode && styles.dayButtonDark,
-                    selectedDay === day && isDarkMode && styles.dayButtonActiveDark,
+                    selectedDay === day &&
+                      isDarkMode &&
+                      styles.dayButtonActiveDark,
                   ]}
                   onPress={() => setSelectedDay(day)}
                 >
-                  <Text style={[
-                    styles.dayButtonText,
-                    selectedDay === day && styles.dayButtonTextActive,
-                    isDarkMode && styles.dayButtonTextDark,
-                    selectedDay === day && isDarkMode && styles.dayButtonTextActiveDark,
-                  ]}>
+                  <Text
+                    style={[
+                      styles.dayButtonText,
+                      selectedDay === day && styles.dayButtonTextActive,
+                      isDarkMode && styles.dayButtonTextDark,
+                      selectedDay === day &&
+                        isDarkMode &&
+                        styles.dayButtonTextActiveDark,
+                    ]}
+                  >
                     Dia {day}
                   </Text>
                 </TouchableOpacity>
@@ -134,35 +155,48 @@ const HomeScreen: React.FC = () => {
           )}
         </View>
 
-        <ViewModeToggle 
-          currentMode={viewMode} 
-          onModeChange={setViewMode} 
-        />
-        
+        <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
+
         <View style={styles.content}>
           {viewMode === 'table' ? (
             <TableView events={dayEvents} />
           ) : (
-            <ListViewNew selectedDay={selectedDay} onDayChange={setSelectedDay} />
+            <ListViewNew
+              selectedDay={selectedDay}
+              onDayChange={setSelectedDay}
+            />
           )}
         </View>
 
         {/* Seção de Patrocinadores */}
-        <View style={[styles.sponsorsSection, isDarkMode && styles.sponsorsSectionDark]}>
-          <Text style={[styles.sponsorsSectionTitle, isDarkMode && styles.sponsorsSectionTitleDark]}>
+        <View
+          style={[
+            styles.sponsorsSection,
+            isDarkMode && styles.sponsorsSectionDark,
+          ]}
+        >
+          <Text
+            style={[
+              styles.sponsorsSectionTitle,
+              isDarkMode && styles.sponsorsSectionTitleDark,
+            ]}
+          >
             Nossos Patrocinadores
           </Text>
-          <ScrollView 
-            horizontal 
+          <ScrollView
+            horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.sponsorsScrollContent}
           >
             {sponsors.map((sponsor, index) => (
-              <View 
-                key={index} 
-                style={[styles.sponsorItem, isDarkMode && styles.sponsorItemDark]}
+              <View
+                key={index}
+                style={[
+                  styles.sponsorItem,
+                  isDarkMode && styles.sponsorItemDark,
+                ]}
               >
-                <Image 
+                <Image
                   source={sponsor.logo}
                   style={styles.sponsorLogoHome}
                   resizeMode="contain"

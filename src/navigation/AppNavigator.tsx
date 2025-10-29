@@ -15,7 +15,8 @@ const AppNavigator: React.FC = () => {
         initialRouteName="Menu"
         screenOptions={{
           headerShown: false, // Usamos Header customizado
-        }}>
+        }}
+      >
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Programacao" component={ProgramacaoScreen} />
         <Stack.Screen name="Mapa" component={MapScreen} />
