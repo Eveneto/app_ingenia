@@ -194,7 +194,11 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={[styles.button, isDarkMode && styles.buttonDark]}
-            onPress={() => Linking.openURL('https://docs.google.com/spreadsheets/d/1_xM69SMz_PI2xGCk7OZdmQhvX1sWwhw60444UzWwIMU/edit?usp=sharing')}
+            onPress={() =>
+              Linking.openURL(
+                'https://docs.google.com/spreadsheets/d/1_xM69SMz_PI2xGCk7OZdmQhvX1sWwhw60444UzWwIMU/edit?usp=sharing',
+              )
+            }
             activeOpacity={0.7}
           >
             <Icon
