@@ -1,162 +1,616 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
+  Modal,
+  RefreshControl,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  useColorScheme,
+  TextInput,
   TouchableOpacity,
-  Linking,
-  ScrollView,
+  View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
-import ViewModeToggle from '../components/ViewModeToggle';
-import TableView from '../components/TableView';
-import ListViewNew from '../components/ListViewNew';
-import { ViewMode } from '../types/Event';
-import { events } from '../data/events';
+import {
+  diaAtivoId,
+  fetchProgramacao,
+  loadCachedProgramacao,
+  PERIODOS,
+  periodoDoDia,
+  temDetalhes,
+  textoHorario,
+} from '../services/programacao';
+import { categoryTagColors, colors, FILTER_CATEGORIES } from '../theme/colors';
+import { Atividade, ProgramacaoCompleta } from '../types/programacao';
 
 const ProgramacaoScreen: React.FC = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [data, setData] = useState<ProgramacaoCompleta | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [diaId, setDiaId] = useState<string>('');
+  const [filtro, setFiltro] = useState('todos');
+  const [busca, setBusca] = useState('');
+  const [detalhe, setDetalhe] = useState<Atividade | null>(null);
+  const diaEscolhido = useRef(false);
 
-  const getDayInfo = (day: number) => {
-    const dates = {
-      1: { date: '29 de Outubro, 2025', description: 'DIA 1 - Abertura e Palestras' },
-      2: { date: '30 de Outubro, 2025', description: 'DIA 2 - Workshops e Exposições' },
-      3: { date: '31 de Outubro, 2025', description: 'DIA 3 - Feira de Estágios e Encerramento' },
+  const aplicar = useCallback(
+    (programacao: ProgramacaoCompleta, preservarDia: boolean) => {
+      setData(programacao);
+      setDiaId(atual => {
+        if (
+          preservarDia &&
+          atual &&
+          programacao.dias.some(dia => dia.id === atual)
+        ) {
+          return atual;
+        }
+        return diaAtivoId(programacao.dias);
+      });
+    },
+    [],
+  );
+
+  const carregar = useCallback(
+    async (modo: 'inicial' | 'refresh') => {
+      if (modo === 'refresh') {
+        setRefreshing(true);
+      }
+      try {
+        const fresh = await fetchProgramacao();
+        aplicar(fresh, modo === 'refresh' || diaEscolhido.current);
+        setError(null);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'Falha ao carregar programação';
+        setError(message);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [aplicar],
+  );
+
+  useEffect(() => {
+    let ativo = true;
+    (async () => {
+      const cached = await loadCachedProgramacao();
+      if (ativo && cached) {
+        aplicar(cached, false);
+        setLoading(false);
+      }
+      if (ativo) {
+        await carregar('inicial');
+      }
+    })();
+    return () => {
+      ativo = false;
     };
-    return dates[day as keyof typeof dates] || dates[1];
-  };
+  }, [aplicar, carregar]);
 
-  const currentDayInfo = getDayInfo(selectedDay);
+  const diaSelecionado = data?.dias.find(dia => dia.id === diaId);
 
-  // Filtrar eventos do dia selecionado
-  const dayEvents = events.filter(event => event.day === selectedDay);
+  const atividades = useMemo(() => {
+    if (!data || !diaId) {
+      return [];
+    }
+    const lista = data.atividades[diaId] ?? [];
+    const termo = busca.trim().toLowerCase();
+    return lista.filter(item => {
+      if (filtro !== 'todos' && item.categoria !== filtro) {
+        return false;
+      }
+      if (!termo) {
+        return true;
+      }
+      const texto = `${item.titulo} ${item.palestrante} ${item.local}`.toLowerCase();
+      return texto.includes(termo);
+    });
+  }, [busca, data, diaId, filtro]);
+
+  const grupos = useMemo(
+    () =>
+      PERIODOS.map(periodo => ({
+        ...periodo,
+        itens: atividades.filter(item => periodoDoDia(item.inicio) === periodo.id),
+      })).filter(grupo => grupo.itens.length > 0),
+    [atividades],
+  );
+
+  const rotuloCategoria = (chave: string) =>
+    data?.categorias[chave] || chave;
 
   return (
-    <SafeAreaView style={[styles.container, isDarkMode && styles.containerDark]}>
+    <SafeAreaView style={styles.container}>
       <Header />
-
-      <View style={[styles.dateContainer, isDarkMode && styles.dateContainerDark]}>
-        <Text style={[styles.dateText, isDarkMode && styles.dateTextDark]}>
-          {currentDayInfo.date}
-        </Text>
-        <Text style={[styles.subtitleText, isDarkMode && styles.subtitleTextDark]}>
-          {currentDayInfo.description}
-        </Text>
-
-        {/* Botões de navegação por dia - apenas para visualização de tabela */}
-        {viewMode === 'table' && (
-          <View style={styles.daySelector}>
-            {[1, 2, 3].map((day) => (
-              <TouchableOpacity
-                key={day}
-                style={[
-                  styles.dayButton,
-                  selectedDay === day && styles.dayButtonActive,
-                  isDarkMode && styles.dayButtonDark,
-                  selectedDay === day && isDarkMode && styles.dayButtonActiveDark,
-                ]}
-                onPress={() => setSelectedDay(day)}
-                activeOpacity={0.7}>
-                <Text
-                  style={[
-                    styles.dayButtonText,
-                    selectedDay === day && styles.dayButtonTextActive,
-                    isDarkMode && styles.dayButtonTextDark,
-                    selectedDay === day && isDarkMode && styles.dayButtonTextActiveDark,
-                  ]}>
-                  Dia {day}
-                </Text>
-              </TouchableOpacity>
-            ))}
+      <View style={styles.toolbar}>
+        <Text style={styles.eyebrow}>Programação 2026</Text>
+        <Text style={styles.title}>Agenda</Text>
+        <View style={styles.searchBox}>
+          <Icon name="search" size={20} color={colors.primary} />
+          <TextInput
+            value={busca}
+            onChangeText={setBusca}
+            placeholder="Buscar atividade, palestrante ou local"
+            placeholderTextColor={colors.textMuted}
+            style={styles.searchInput}
+            autoCorrect={false}
+          />
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filters}
+        >
+          <FilterPill
+            label="Todos"
+            active={filtro === 'todos'}
+            onPress={() => setFiltro('todos')}
+          />
+          {FILTER_CATEGORIES.map(chave => (
+            <FilterPill
+              key={chave}
+              label={rotuloCategoria(chave)}
+              active={filtro === chave}
+              onPress={() => setFiltro(chave)}
+            />
+          ))}
+        </ScrollView>
+        {data ? (
+          <View style={styles.days}>
+            {data.dias.map(dia => {
+              const ativo = dia.id === diaId;
+              return (
+                <TouchableOpacity
+                  key={dia.id}
+                  style={styles.dayTab}
+                  onPress={() => {
+                    diaEscolhido.current = true;
+                    setDiaId(dia.id);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.dayLabel, ativo && styles.dayLabelActive]}>
+                    {dia.label}
+                  </Text>
+                  {ativo ? <View style={styles.dayUnderline} /> : null}
+                </TouchableOpacity>
+              );
+            })}
           </View>
-        )}
-
-        <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
+        ) : null}
       </View>
 
-      {viewMode === 'table' ? (
-        <TableView events={dayEvents} />
+      {loading && !data ? (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      ) : !data ? (
+        <View style={styles.centered}>
+          <Text style={styles.emptyText}>
+            {error || 'Não foi possível carregar a programação.'}
+          </Text>
+          <TouchableOpacity style={styles.retry} onPress={() => carregar('inicial')}>
+            <Text style={styles.retryText}>Tentar novamente</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
-        <ListViewNew selectedDay={selectedDay} onDayChange={setSelectedDay} />
+        <ScrollView
+          contentContainerStyle={styles.list}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => carregar('refresh')}
+              colors={[colors.accent]}
+              tintColor={colors.primary}
+            />
+          }
+        >
+          <Text style={styles.dayHeading}>
+            {diaSelecionado?.completo || 'Programação'}
+          </Text>
+          {error ? (
+            <Text style={styles.offlineHint}>
+              Exibindo a última agenda salva. {error}
+            </Text>
+          ) : null}
+          {grupos.length === 0 ? (
+            <Text style={styles.emptyText}>
+              Nenhuma atividade encontrada para essa busca ou filtro.
+            </Text>
+          ) : (
+            grupos.map(grupo => (
+              <View key={grupo.id} style={styles.period}>
+                <Text style={styles.periodTitle}>{grupo.label}</Text>
+                {grupo.itens.map((item, index) => (
+                  <ActivityCard
+                    key={`${item.inicio}-${item.titulo}-${index}`}
+                    item={item}
+                    rotulo={rotuloCategoria(item.categoria)}
+                    onOpen={() => {
+                      if (temDetalhes(item)) {
+                        setDetalhe(item);
+                      }
+                    }}
+                  />
+                ))}
+              </View>
+            ))
+          )}
+        </ScrollView>
       )}
+
+      <Modal
+        visible={detalhe !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDetalhe(null)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <TouchableOpacity
+              style={styles.modalClose}
+              onPress={() => setDetalhe(null)}
+            >
+              <Icon name="close" size={22} color={colors.primary} />
+            </TouchableOpacity>
+            {detalhe ? (
+              <ScrollView>
+                <Text style={styles.modalTitle}>{detalhe.titulo}</Text>
+                <DetailLine
+                  label="Horário"
+                  value={textoHorario(detalhe.inicio, detalhe.fim)}
+                />
+                <DetailLine label="Local" value={detalhe.local} />
+                <DetailLine label="Palestrante" value={detalhe.palestrante} />
+                <DetailLine
+                  label="Descrição"
+                  value={detalhe.detalhes?.descricao}
+                />
+                <DetailLine
+                  label="Capacidade"
+                  value={detalhe.detalhes?.capacidade}
+                />
+                <DetailLine
+                  label="Inscrição"
+                  value={detalhe.detalhes?.inscricao}
+                />
+              </ScrollView>
+            ) : null}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
+  );
+};
+
+const FilterPill: React.FC<{
+  label: string;
+  active: boolean;
+  onPress: () => void;
+}> = ({ label, active, onPress }) => (
+  <TouchableOpacity
+    style={[styles.pill, active && styles.pillActive]}
+    onPress={onPress}
+    activeOpacity={0.8}
+  >
+    <Text style={[styles.pillText, active && styles.pillTextActive]}>
+      {label}
+    </Text>
+  </TouchableOpacity>
+);
+
+const ActivityCard: React.FC<{
+  item: Atividade;
+  rotulo: string;
+  onOpen: () => void;
+}> = ({ item, rotulo, onOpen }) => {
+  const tag = categoryTagColors[item.categoria] || {
+    background: '#EEF1F4',
+    text: colors.textMuted,
+  };
+  const discreto = item.categoria === 'intervalo';
+  const mostraFim = Boolean(item.fim && item.fim !== item.inicio);
+  const abre = temDetalhes(item);
+
+  return (
+    <TouchableOpacity
+      style={[styles.card, discreto && styles.cardMuted]}
+      onPress={onOpen}
+      activeOpacity={abre ? 0.75 : 1}
+      disabled={!abre}
+    >
+      <View style={styles.timeCol}>
+        <Text style={styles.timeStart}>{item.inicio}</Text>
+        {mostraFim ? <Text style={styles.timeEnd}>às {item.fim}</Text> : null}
+      </View>
+      <View style={styles.cardBody}>
+        <View style={[styles.tag, { backgroundColor: tag.background }]}>
+          <Text style={[styles.tagText, { color: tag.text }]}>
+            {rotulo.toUpperCase()}
+          </Text>
+        </View>
+        <Text style={styles.cardTitle}>{item.titulo}</Text>
+        {item.local?.trim() ? (
+          <Text style={styles.cardLocal}>Local: {item.local}</Text>
+        ) : null}
+        {item.palestrante?.trim() ? (
+          <Text style={styles.cardSpeaker}>{item.palestrante}</Text>
+        ) : null}
+      </View>
+      {abre ? <Text style={styles.detailsLink}>Detalhes</Text> : null}
+    </TouchableOpacity>
+  );
+};
+
+const DetailLine: React.FC<{ label: string; value?: string }> = ({
+  label,
+  value,
+}) => {
+  if (!value?.trim()) {
+    return null;
+  }
+  return (
+    <View style={styles.detailLine}>
+      <Text style={styles.detailLabel}>{label}</Text>
+      <Text style={styles.detailValue}>{value}</Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.backgroundSoft,
   },
-  containerDark: {
-    backgroundColor: '#1a1a1a',
-  },
-  dateContainer: {
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  dateContainerDark: {
-    backgroundColor: '#2c2c2c',
-    borderBottomColor: '#555555',
-  },
-  dateText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333333',
-    textAlign: 'center',
-  },
-  dateTextDark: {
-    color: '#ffffff',
-  },
-  subtitleText: {
-    fontSize: 14,
-    color: '#666666',
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  subtitleTextDark: {
-    color: '#cccccc',
-  },
-  daySelector: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 16,
-  },
-  dayButton: {
-    backgroundColor: '#f0f0f0',
+  toolbar: {
+    backgroundColor: colors.background,
     paddingHorizontal: 16,
+    paddingTop: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  eyebrow: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1.6,
+    textTransform: 'uppercase',
+  },
+  title: {
+    color: colors.primary,
+    fontSize: 28,
+    fontFamily: 'serif',
+    marginTop: 2,
+    marginBottom: 12,
+  },
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.background,
+    borderRadius: 2,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+  },
+  searchInput: {
+    flex: 1,
+    height: 44,
+    marginLeft: 8,
+    color: colors.primary,
+    fontSize: 15,
+  },
+  filters: {
+    paddingBottom: 12,
+    gap: 8,
+  },
+  pill: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.background,
+    borderRadius: 30,
+    paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 20,
-    marginHorizontal: 4,
+    marginRight: 8,
   },
-  dayButtonActive: {
-    backgroundColor: '#FF002E',
+  pillActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
-  dayButtonDark: {
-    backgroundColor: '#3c3c3c',
+  pillText: {
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 13,
   },
-  dayButtonActiveDark: {
-    backgroundColor: '#5AC8FA',
+  pillTextActive: {
+    color: colors.textOnDark,
   },
-  dayButtonText: {
+  days: {
+    flexDirection: 'row',
+  },
+  dayTab: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 10,
+  },
+  dayLabel: {
+    color: colors.textMuted,
+    fontWeight: '700',
     fontSize: 14,
-    fontWeight: '600',
-    color: '#666666',
   },
-  dayButtonTextActive: {
-    color: '#ffffff',
+  dayLabelActive: {
+    color: colors.primary,
   },
-  dayButtonTextDark: {
-    color: '#cccccc',
+  dayUnderline: {
+    marginTop: 6,
+    height: 3,
+    width: '70%',
+    backgroundColor: colors.accent,
   },
-  dayButtonTextActiveDark: {
-    color: '#ffffff',
+  list: {
+    padding: 16,
+    paddingBottom: 32,
+  },
+  dayHeading: {
+    color: colors.primary,
+    fontFamily: 'serif',
+    fontSize: 22,
+    marginBottom: 12,
+  },
+  period: {
+    marginBottom: 8,
+  },
+  periodTitle: {
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 13,
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  card: {
+    flexDirection: 'row',
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderLeftWidth: 6,
+    borderLeftColor: colors.accent,
+    padding: 12,
+    marginBottom: 10,
+  },
+  cardMuted: {
+    opacity: 0.72,
+    borderLeftColor: '#C5CDD6',
+  },
+  timeCol: {
+    width: 72,
+    paddingRight: 8,
+  },
+  timeStart: {
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: 15,
+  },
+  timeEnd: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  cardBody: {
+    flex: 1,
+  },
+  tag: {
+    alignSelf: 'flex-start',
+    borderRadius: 30,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    marginBottom: 6,
+  },
+  tagText: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+  },
+  cardTitle: {
+    color: colors.primaryDark,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  cardLocal: {
+    marginTop: 6,
+    color: colors.primary,
+    fontSize: 13,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
+    paddingLeft: 8,
+  },
+  cardSpeaker: {
+    marginTop: 4,
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
+  detailsLink: {
+    color: colors.accent,
+    fontWeight: '700',
+    fontSize: 12,
+    alignSelf: 'flex-end',
+    marginLeft: 8,
+  },
+  centered: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  emptyText: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  offlineHint: {
+    color: colors.accent,
+    fontSize: 13,
+    marginBottom: 12,
+  },
+  retry: {
+    marginTop: 16,
+    backgroundColor: colors.accent,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 2,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+  },
+  retryText: {
+    color: colors.textOnDark,
+    fontWeight: '700',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(11, 33, 78, 0.72)',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: colors.background,
+    maxHeight: '80%',
+    padding: 20,
+    borderRadius: 2,
+  },
+  modalClose: {
+    alignSelf: 'flex-end',
+  },
+  modalTitle: {
+    color: colors.primary,
+    fontFamily: 'serif',
+    fontSize: 24,
+    marginBottom: 12,
+  },
+  detailLine: {
+    marginBottom: 12,
+  },
+  detailLabel: {
+    color: colors.accent,
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  detailValue: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    lineHeight: 22,
   },
 });
 

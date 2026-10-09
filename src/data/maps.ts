@@ -8,6 +8,14 @@ export interface MapLocation {
 
 export const mapLocations: MapLocation[] = [
   {
+    id: 'poli-upe',
+    name: 'POLI/UPE',
+    description: 'Rua Benfica, 455 - Madalena, Recife - PE',
+    mapUrl:
+      'https://www.google.com/maps/search/?api=1&query=Escola+Politecnica+da+Universidade+de+Pernambuco+Rua+Benfica+455+Recife+PE',
+    icon: 'school',
+  },
+  {
     id: 'bloco-a',
     name: 'Bloco A',
     description: 'Auditório, Mini Auditório, Sala de Atos, Pátio Lateral',
