@@ -1,323 +1,61 @@
-# Guia Completo: Como Criar um APK do AppIngenia
+# Visualizar o AppIngenia em um celular Android
 
-Este guia fornece as instruções passo a passo para criar um arquivo APK (Android Package) do aplicativo AppIngenia.
+## Requisitos no computador
 
-## Pré-requisitos
+- Node.js 20 ou superior.
+- JDK 17.
+- Android Studio com Android SDK Platform 36, Android SDK Build-Tools 36.0.0, Android SDK Platform-Tools e NDK 29.0.14206865.
+- Cabo USB e depuração USB habilitada no celular.
 
-Antes de começar, certifique-se de que você possui:
+No Android Studio, instale os componentes em **Tools > SDK Manager**. O **Android SDK Platform-Tools** inclui o ADB; não é necessário instalá-lo pelo Chocolatey. Configure `ANDROID_HOME` para a pasta do SDK e `JAVA_HOME` para o JDK 17. O Gradle usa essas variáveis; o projeto não deve fixar o caminho local do Java. Para usar `adb` em qualquer terminal, inclua `%ANDROID_HOME%\platform-tools` no `Path` do Windows e abra um terminal novo. Para adicionar somente à sessão atual do PowerShell:
 
-1. **Node.js e npm** instalados
-   ```bash
-   node --version
-   npm --version
+```powershell
+$env:Path += ";$env:ANDROID_HOME\platform-tools"
+```
+
+## Executar diretamente no celular (desenvolvimento)
+
+1. No celular, habilite **Opções do desenvolvedor > Depuração USB** e conecte-o ao computador. Aceite a autorização exibida no aparelho.
+2. Abra o PowerShell na pasta `app_ingenia` e confira se o dispositivo aparece como `device`:
+
+   ```powershell
+   & "$env:ANDROID_HOME\platform-tools\adb.exe" devices
    ```
 
-2. **Android SDK** instalado
-   - Pode ser instalado via Android Studio ou manualmente
+3. Instale as dependências (somente na primeira vez) e inicie o app:
 
-3. **Java Development Kit (JDK)** versão 11 ou superior
-   ```bash
-   java -version
+   ```powershell
+   npm install
+   npm run android-dev
    ```
 
-4. **Git** instalado
-   ```bash
-   git --version
-   ```
+O comando compila e instala a versão de desenvolvimento e o React Native CLI encaminha a porta do Metro pelo ADB do Android SDK. Não é necessário instalar ADB com npm ou Chocolatey nem adicioná-lo ao `Path` para executar esse comando. Mantenha o terminal do Metro aberto enquanto usa o app; essa versão precisa dele para carregar o JavaScript.
 
-5. **Variáveis de ambiente configuradas:**
-   - `ANDROID_HOME` apontando para o diretório do Android SDK
-   - `JAVA_HOME` apontando para o diretório do JDK
-   - `PATH` incluindo `$ANDROID_HOME/platform-tools` e `$ANDROID_HOME/tools`
+Se o celular aparecer como `unauthorized`, aceite a solicitação no aparelho. Para verificar o dispositivo sem adicionar o ADB ao `Path`, execute `& "$env:ANDROID_HOME\platform-tools\adb.exe" devices` no PowerShell. Se o app não conseguir se conectar ao Metro, execute `& "$env:ANDROID_HOME\platform-tools\adb.exe" reverse tcp:8081 tcp:8081` e recarregue o app.
 
-## Passo 1: Preparar o Ambiente de Desenvolvimento
+## Gerar um APK para abrir sem o Metro
 
-### 1.1 Instalar dependências do projeto
+Na pasta `app_ingenia`, execute no PowerShell:
 
-```bash
-cd /home/dev_pc/Documentos/app_ingenia/AppIngenia
-npm install
+```powershell
+Push-Location .\android
+.\gradlew.bat assembleRelease
+Pop-Location
 ```
 
-### 1.2 Instalar dependências do Gradle
+O APK ficará em `android\app\build\outputs\apk\release\app-release.apk`. Para instalar por USB:
 
-```bash
-cd android
-./gradlew clean
-cd ..
+```powershell
+& "$env:ANDROID_HOME\platform-tools\adb.exe" install -r .\android\app\build\outputs\apk\release\app-release.apk
 ```
 
-## Passo 2: Configurar Variáveis de Ambiente (se necessário)
-
-Se as variáveis de ambiente não estão configuradas, adicione ao seu `~/.bashrc` ou `~/.zshrc`:
-
-```bash
-export ANDROID_HOME=$HOME/Android/Sdk
-export JAVA_HOME=/path/to/java/jdk
-export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools
-```
-
-Depois, recarregue o arquivo:
-
-```bash
-source ~/.bashrc
-# ou
-source ~/.zshrc
-```
-
-## Passo 3: Gerar o APK de Debug
-
-Para criar um APK em modo debug (usado para testes e desenvolvimento):
-
-```bash
-cd /home/dev_pc/Documentos/app_ingenia/AppIngenia
-npx react-native build-android
-```
-
-Ou usando gradle diretamente:
-
-```bash
-cd android
-./gradlew assembleDebug
-cd ..
-```
-
-O APK de debug será gerado em:
-```
-android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-## Passo 4: Gerar o APK de Release (Produção)
-
-Para criar um APK otimizado para release/produção:
-
-### 4.1 Criar um Keystore (primeira vez)
-
-```bash
-keytool -genkey -v -keystore my-release-key.keystore -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
-```
-
-Você será solicitado a:
-- Definir uma senha para o keystore
-- Fornecer informações pessoais
-- Confirmar a senha
-
-**Salve o keystore em um local seguro!**
-
-### 4.2 Configurar o gradle.properties
-
-Edite o arquivo `android/gradle.properties` e adicione (se não existir):
-
-```properties
-MYAPP_RELEASE_STORE_FILE=my-release-key.keystore
-MYAPP_RELEASE_STORE_PASSWORD=sua_senha_keystore
-MYAPP_RELEASE_KEY_ALIAS=my-key-alias
-MYAPP_RELEASE_KEY_PASSWORD=sua_senha_chave
-```
-
-### 4.3 Editar o build.gradle
-
-Verifique se o `android/app/build.gradle` contém (deve estar presente):
-
-```gradle
-signingConfigs {
-    release {
-        if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            storePassword MYAPP_RELEASE_STORE_PASSWORD
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            keyPassword MYAPP_RELEASE_KEY_PASSWORD
-        }
-    }
-}
-
-buildTypes {
-    release {
-        signingConfig signingConfigs.release
-        minifyEnabled true
-        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-    }
-}
-```
-
-### 4.4 Compilar o APK de Release
-
-```bash
-cd /home/dev_pc/Documentos/app_ingenia/AppIngenia
-cd android
-./gradlew assembleRelease
-cd ..
-```
-
-O APK de release será gerado em:
-```
-android/app/build/outputs/apk/release/app-release.apk
-```
-
-## Passo 5: Gerar um Bundle AAB (Google Play Store)
-
-Se você planeja publicar no Google Play Store, gere um App Bundle:
-
-```bash
-cd /home/dev_pc/Documentos/app_ingenia/AppIngenia
-cd android
-./gradlew bundleRelease
-cd ..
-```
-
-O bundle será gerado em:
-```
-android/app/build/outputs/bundle/release/app-release.aab
-```
-
-## Passo 6: Testar o APK
-
-### 6.1 Listar dispositivos conectados
-
-```bash
-adb devices
-```
-
-### 6.2 Instalar o APK em um dispositivo
-
-Para instalar o APK de debug:
-
-```bash
-adb install android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-Para instalar o APK de release:
-
-```bash
-adb install android/app/build/outputs/apk/release/app-release.apk
-```
-
-### 6.3 Desinstalar o aplicativo
-
-```bash
-adb uninstall com.appingenia
-```
-
-### 6.4 Ver logs da aplicação
-
-```bash
-adb logcat
-```
-
-## Passo 7: Troubleshooting Comum
-
-### Erro: "ANDROID_HOME not set"
-
-```bash
-export ANDROID_HOME=$HOME/Android/Sdk
-```
-
-### Erro: "Java not found"
-
-```bash
-export JAVA_HOME=/path/to/jdk
-export PATH=$PATH:$JAVA_HOME/bin
-```
-
-### Erro: "Gradle build failed"
-
-```bash
-cd android
-./gradlew clean
-./gradlew assembleDebug
-cd ..
-```
-
-### Erro: "Certificate signature verification failed"
-
-Verifique se o keystore está correto e as senhas estão corretas em `gradle.properties`.
-
-### Problema: Aplicação lenta ou não responsiva
-
-- Teste com `assembleDebug` primeiro
-- Verifique se o ProGuard está habilitado em release
-- Verifique logs com `adb logcat`
-
-## Passo 8: Otimização para Release
-
-Antes de gerar o APK final:
-
-1. **Versão do app**: Edite `android/app/build.gradle`
-   ```gradle
-   versionCode 1
-   versionName "1.0"
-   ```
-
-2. **Remover logs de debug**: Verifique se há `console.log` em produção
-
-3. **Testar em múltiplos dispositivos**: Use emuladores de diferentes tamanhos
-
-4. **Verificar permissões**: Abra `android/app/src/main/AndroidManifest.xml`
-
-## Passo 9: Publicar no Google Play Store
-
-1. Crie uma conta de desenvolvedor no [Google Play Console](https://play.google.com/console)
-
-2. Crie um novo aplicativo
-
-3. Faça upload do arquivo `.aab` gerado no passo 5
-
-4. Preencha as informações do aplicativo (descrição, screenshots, etc.)
-
-5. Configure o preço e distribuição
-
-6. Envie para análise
-
-## Resumo dos Comandos Principais
-
-```bash
-# Instalar dependências
-npm install
-
-# APK Debug
-npx react-native build-android
-# ou
-cd android && ./gradlew assembleDebug && cd ..
-
-# APK Release
-cd android && ./gradlew assembleRelease && cd ..
-
-# Bundle AAB (Google Play)
-cd android && ./gradlew bundleRelease && cd ..
-
-# Instalar em dispositivo
-adb install android/app/build/outputs/apk/debug/app-debug.apk
-
-# Listar dispositivos
-adb devices
-
-# Ver logs
-adb logcat
-```
-
-## Recursos Adicionais
-
-- [Documentação React Native](https://reactnative.dev/docs/android-setup)
-- [Android Developer Guide](https://developer.android.com/)
-- [Google Play Console](https://play.google.com/console)
-
-## Notas Importantes
-
-⚠️ **Segurança:**
-- Nunca compartilhe o arquivo keystore
-- Nunca compartilhe as senhas do keystore
-- Guarde o keystore em um local seguro (como um repositório privado)
-
-⚠️ **Versionamento:**
-- Sempre incremente `versionCode` antes de fazer upload de uma nova versão
-- Mantenha um histórico de versões
-
-⚠️ **Testes:**
-- Sempre teste o APK em múltiplos dispositivos antes de publicar
-- Verifique a compatibilidade com diferentes versões do Android
-
----
-
-**Última atualização:** 29 de outubro de 2025
-
-Para mais informações, consulte a documentação oficial do React Native para Android.
+Também é possível copiar esse APK para o celular e abri-lo lá; talvez seja necessário permitir a instalação de apps dessa origem nas configurações do Android. Este APK usa a assinatura de debug do projeto e serve para teste/sideload, não para publicação na Play Store.
+
+## Problemas comuns
+
+- **Nenhum dispositivo aparece:** confira o cabo, o modo USB e a depuração USB; execute `adb devices` novamente.
+- **`adb` não é reconhecido no terminal:** confirme que `ANDROID_HOME` aponta para o SDK. O comando `npm run android-dev` usa o ADB detectado pelo React Native CLI; para executar o ADB manualmente sem alterar o `Path`, use `& "$env:ANDROID_HOME\platform-tools\adb.exe" devices` no PowerShell.
+- **Chocolatey informa `Access denied` ao instalar `adb`:** o erro significa que o processo não tem permissão para gravar em `C:\ProgramData\chocolatey`. Não é preciso instalar o ADB pelo Chocolatey; use o **Android SDK Platform-Tools** no SDK Manager. Se precisar instalar pacotes pelo Chocolatey, abra o PowerShell com **Executar como administrador** e repita o comando.
+- **Falha de Java/Gradle:** confirme que `JAVA_HOME` aponta para um JDK 17 válido e abra um novo terminal.
+- **SDK ou NDK ausente:** instale as versões listadas nos requisitos pelo SDK Manager do Android Studio.
+- **Limpar os artefatos de build:** na pasta `app_ingenia`, execute `Push-Location .\android; .\gradlew.bat clean; Pop-Location`. Isso não é necessário a cada compilação.
