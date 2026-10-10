@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,32 +6,48 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../theme/colors';
+import SideMenu from './SideMenu';
 
 const Header: React.FC = () => {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  const [menuAberto, setMenuAberto] = useState(false);
   const canGoBack = navigation.canGoBack();
+  const topInset = insets.top;
+
+  const botaoMenu = (
+    <TouchableOpacity
+      onPress={() => setMenuAberto(true)}
+      style={styles.side}
+      accessibilityLabel="Abrir menu"
+    >
+      <Icon name="menu" size={26} color={colors.primary} />
+    </TouchableOpacity>
+  );
+
+  const botaoVoltar = (
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={styles.side}
+      accessibilityLabel="Voltar"
+    >
+      <Icon name="arrow-back" size={24} color={colors.primary} />
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={styles.header}>
-      {canGoBack ? (
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.side}
-          accessibilityLabel="Voltar"
-        >
-          <Icon name="arrow-back" size={24} color={colors.primary} />
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.side} />
-      )}
+    <View style={[styles.header, { paddingTop: topInset + 8 }]}>
+      {canGoBack ? botaoVoltar : botaoMenu}
       <Image
         source={require('../../assets/images/2026/Ingenia_2026.png')}
         style={styles.logo}
         resizeMode="contain"
       />
-      <View style={styles.side} />
+      {canGoBack ? botaoMenu : <View style={styles.side} />}
+      <SideMenu visible={menuAberto} onClose={() => setMenuAberto(false)} />
     </View>
   );
 };
@@ -39,7 +55,7 @@ const Header: React.FC = () => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.background,
-    paddingVertical: 8,
+    paddingBottom: 8,
     paddingHorizontal: 8,
     borderBottomWidth: 3,
     borderBottomColor: colors.accent,

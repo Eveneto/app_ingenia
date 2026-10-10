@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Modal,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import {
@@ -124,7 +124,7 @@ const ProgramacaoScreen: React.FC = () => {
     data?.categorias[chave] || chave;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Header />
       <View style={styles.toolbar}>
         <Text style={styles.eyebrow}>Programação 2026</Text>

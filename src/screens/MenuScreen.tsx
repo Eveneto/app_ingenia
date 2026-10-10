@@ -1,64 +1,72 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  Alert,
   Image,
   Linking,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 import SpeakersSection from '../components/SpeakersSection';
+import StoryCard from '../components/StoryCard';
+import {
+  MOSTRAR_STORY,
+  STORY_LAYOUT_HEIGHT,
+  STORY_LAYOUT_WIDTH,
+} from '../config/instagram';
 import { SPONSOR_LEVELS, sponsors } from '../data/sponsors';
+import { compartilharFeed, compartilharStory } from '../services/instagram';
 import { colors, sponsorLevelColors } from '../theme/colors';
 
 const INSCRICAO_URL = 'https://www.serdigital.com.br/ingenia/2026/safetyarea/';
 
 const MenuScreen: React.FC = ({ navigation }: any) => {
+  const storyRef = useRef<View>(null);
+  const [enviandoStory, setEnviandoStory] = useState(false);
+
   const handleInscricao = () => {
     Linking.openURL(INSCRICAO_URL);
   };
 
   const handleInstagramFeed = () => {
-    Linking.openURL('instagram://').catch(() => {
-      Linking.openURL('https://www.instagram.com/');
-    });
+    compartilharFeed().catch(() => undefined);
   };
 
-  const handleInstagramStories = () => {
-    const cameraUrl = 'instagram://camera';
-    const webUrl = 'https://www.instagram.com/';
-
-    Linking.openURL(cameraUrl).catch(() => {
-      Linking.openURL('instagram://').catch(() => {
-        Alert.alert(
-          'Instagram',
-          'Abra o Instagram e toque no ícone + para criar um Story!',
-          [
-            {
-              text: 'Abrir Instagram',
-              onPress: () =>
-                Linking.openURL('instagram://').catch(() =>
-                  Linking.openURL(webUrl),
-                ),
-            },
-            { text: 'Cancelar', style: 'cancel' },
-          ],
-        );
-      });
-    });
+  const handleInstagramStories = async () => {
+    if (enviandoStory) {
+      return;
+    }
+    setEnviandoStory(true);
+    try {
+      await compartilharStory(storyRef);
+    } finally {
+      setEnviandoStory(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Header />
+      {MOSTRAR_STORY ? (
+        <View
+          ref={storyRef}
+          collapsable={false}
+          pointerEvents="none"
+          style={styles.storyCapture}
+        >
+          <StoryCard />
+        </View>
+      ) : null}
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+      >
         <View style={styles.hero}>
           <Text style={styles.eyebrow}>21 a 23 de outubro de 2026</Text>
           <Text style={styles.heroTitle}>INGENIA 2026</Text>
@@ -119,14 +127,19 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
               <IconCommunity name="image-multiple" size={22} color="#ffffff" />
               <Text style={styles.instagramButtonText}>Postar no Feed</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.instagramButton, styles.instagramButtonStories]}
-              onPress={handleInstagramStories}
-              activeOpacity={0.7}
-            >
-              <IconCommunity name="image-plus" size={22} color="#ffffff" />
-              <Text style={styles.instagramButtonText}>Criar Story</Text>
-            </TouchableOpacity>
+            {MOSTRAR_STORY ? (
+              <TouchableOpacity
+                style={[styles.instagramButton, styles.instagramButtonStories]}
+                onPress={handleInstagramStories}
+                disabled={enviandoStory}
+                activeOpacity={0.7}
+              >
+                <IconCommunity name="image-plus" size={22} color="#ffffff" />
+                <Text style={styles.instagramButtonText}>
+                  {enviandoStory ? 'Abrindo...' : 'Criar Story'}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
 
@@ -179,6 +192,18 @@ const MenuButton: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: colors.backgroundSoft,
+  },
+  storyCapture: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: STORY_LAYOUT_WIDTH,
+    height: STORY_LAYOUT_HEIGHT,
+    zIndex: -1,
+  },
+  scroll: {
     flex: 1,
     backgroundColor: colors.backgroundSoft,
   },

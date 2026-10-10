@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -9,6 +8,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import { mapLocations } from '../data/maps';
@@ -22,7 +22,7 @@ const MapScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>

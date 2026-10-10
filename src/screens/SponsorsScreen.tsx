@@ -1,19 +1,19 @@
 import React from 'react';
 import {
   Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import { SPONSOR_LEVELS, sponsors } from '../data/sponsors';
 import { colors, sponsorLevelColors } from '../theme/colors';
 
 const SponsorsScreen: React.FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Header />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.title}>Patrocinadores</Text>
