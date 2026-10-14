@@ -14,6 +14,7 @@ import { colors } from '../theme/colors';
 
 const PLAY_STORE = `https://play.google.com/store/apps/details?id=${INSTAGRAM_PACKAGE}`;
 const PLAY_STORE_APP = `market://details?id=${INSTAGRAM_PACKAGE}`;
+const APP_STORE = 'itms-apps://apps.apple.com/app/instagram/id389801252';
 
 function avisar(mensagem: string) {
   if (Platform.OS === 'android') {
@@ -33,6 +34,10 @@ async function instagramInstalado() {
 }
 
 function abrirLoja() {
+  if (Platform.OS === 'ios') {
+    Linking.openURL(APP_STORE).catch(() => Linking.openURL(INSTAGRAM_WEB));
+    return;
+  }
   Linking.openURL(PLAY_STORE_APP).catch(() => Linking.openURL(PLAY_STORE));
 }
 
