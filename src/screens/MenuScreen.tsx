@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import {
-  Image,
   Linking,
   ScrollView,
   StyleSheet,
@@ -13,15 +12,15 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from '../components/Header';
 import SpeakersSection from '../components/SpeakersSection';
+import SponsorsSection from '../components/SponsorsSection';
 import StoryCard from '../components/StoryCard';
 import {
   MOSTRAR_STORY,
   STORY_LAYOUT_HEIGHT,
   STORY_LAYOUT_WIDTH,
 } from '../config/instagram';
-import { SPONSOR_LEVELS, sponsors } from '../data/sponsors';
 import { compartilharFeed, compartilharStory } from '../services/instagram';
-import { colors, sponsorLevelColors } from '../theme/colors';
+import { colors } from '../theme/colors';
 
 const INSCRICAO_URL = 'https://www.serdigital.com.br/ingenia/2026/safetyarea/';
 
@@ -143,37 +142,7 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           </View>
         </View>
 
-        <View style={styles.sponsorsContainer}>
-          <Text style={styles.sectionTitle}>Patrocinadores</Text>
-          {SPONSOR_LEVELS.map(level => {
-            const items = sponsors.filter(item => item.level === level);
-            if (items.length === 0) {
-              return null;
-            }
-            const badge = sponsorLevelColors[level];
-            return (
-              <View key={level} style={styles.categorySection}>
-                <View style={[styles.levelBadge, { backgroundColor: badge.background }]}>
-                  <Text style={[styles.levelBadgeText, { color: badge.text }]}>
-                    {level}
-                  </Text>
-                </View>
-                <View style={styles.sponsorsGrid}>
-                  {items.map(sponsor => (
-                    <View key={sponsor.name} style={styles.sponsorItem}>
-                      <Image
-                        source={sponsor.logo}
-                        style={styles.sponsorLogo}
-                        resizeMode="contain"
-                        accessibilityLabel={sponsor.name}
-                      />
-                    </View>
-                  ))}
-                </View>
-              </View>
-            );
-          })}
-        </View>
+        <SponsorsSection embedded />
       </ScrollView>
     </SafeAreaView>
   );
@@ -339,57 +308,6 @@ const styles = StyleSheet.create({
     color: colors.textOnDark,
     fontSize: 13,
     fontWeight: '700',
-  },
-  sponsorsContainer: {
-    backgroundColor: colors.backgroundSponsors,
-    marginHorizontal: -16,
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-  },
-  sectionTitle: {
-    fontFamily: 'serif',
-    fontSize: 28,
-    color: colors.primary,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  categorySection: {
-    marginBottom: 18,
-    alignItems: 'center',
-  },
-  levelBadge: {
-    borderRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    marginBottom: 12,
-  },
-  levelBadgeText: {
-    fontWeight: '700',
-    fontSize: 14,
-  },
-  sponsorsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  sponsorItem: {
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    margin: 6,
-    width: '44%',
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  sponsorLogo: {
-    width: '100%',
-    height: '100%',
   },
 });
 

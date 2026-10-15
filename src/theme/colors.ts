@@ -14,14 +14,23 @@ export const colors = {
   cardShadow: 'rgba(20, 56, 127, 0.06)',
 };
 
+const esmeralda = { background: '#50C878', text: '#FFFFFF' };
+const ouro = { background: '#FFD700', text: '#000000' };
+const prata = { background: '#C0C0C0', text: '#000000' };
+const bronze = { background: '#CD7F32', text: '#FFFFFF' };
+
 export const sponsorLevelColors: Record<
   string,
   { background: string; text: string }
 > = {
-  Esmeralda: { background: '#50C878', text: '#FFFFFF' },
-  Ouro: { background: '#FFD700', text: '#000000' },
-  Prata: { background: '#C0C0C0', text: '#000000' },
-  Bronze: { background: '#CD7F32', text: '#FFFFFF' },
+  Esmeralda: esmeralda,
+  esmeralda,
+  Ouro: ouro,
+  ouro,
+  Prata: prata,
+  prata,
+  Bronze: bronze,
+  bronze,
 };
 
 export const categoryTagColors: Record<
