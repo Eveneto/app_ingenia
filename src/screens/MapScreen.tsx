@@ -1,22 +1,20 @@
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
-  useColorScheme,
   TouchableOpacity,
   Linking,
   ScrollView,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from '../components/Header';
 import { mapLocations } from '../data/maps';
+import { colors } from '../theme/colors';
 
 const MapScreen: React.FC = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
   const handleOpenMap = (mapUrl: string, locationName: string) => {
     Linking.openURL(mapUrl).catch(() => {
       Alert.alert('Erro', `Não foi possível abrir o mapa de ${locationName}`);
@@ -24,17 +22,14 @@ const MapScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView
-      style={[styles.container, isDarkMode && styles.containerDark]}
-    >
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerContainer}>
-          <Text style={[styles.title, isDarkMode && styles.titleDark]}>
-            Mapas dos Locais
-          </Text>
-          <Text style={[styles.subtitle, isDarkMode && styles.subtitleDark]}>
+          <Text style={styles.eyebrow}>Local</Text>
+          <Text style={styles.title}>Mapas dos locais</Text>
+          <Text style={styles.subtitle}>
             Toque em um local para abrir no Google Maps
           </Text>
         </View>
@@ -43,47 +38,25 @@ const MapScreen: React.FC = () => {
           {mapLocations.map(location => (
             <TouchableOpacity
               key={location.id}
-              style={[
-                styles.locationCard,
-                isDarkMode && styles.locationCardDark,
-              ]}
+              style={styles.locationCard}
               onPress={() => handleOpenMap(location.mapUrl, location.name)}
               activeOpacity={0.7}
             >
-              <Text
-                style={[
-                  styles.locationName,
-                  isDarkMode && styles.locationNameDark,
-                ]}
-              >
-                {location.name}
+              <Text style={styles.locationName}>{location.name}</Text>
+              <Text style={styles.locationDescription}>
+                {location.description}
               </Text>
-              <View style={[styles.buttonContainer]}>
-                <Icon
-                  name="open-in-new"
-                  size={20}
-                  color={isDarkMode ? '#5AC8FA' : '#FF002E'}
-                />
-                <Text
-                  style={[
-                    styles.openButtonText,
-                    isDarkMode && styles.openButtonTextDark,
-                  ]}
-                >
-                  Abrir no Maps
-                </Text>
+              <View style={styles.buttonContainer}>
+                <Icon name="open-in-new" size={20} color={colors.accent} />
+                <Text style={styles.openButtonText}>Abrir no Maps</Text>
               </View>
             </TouchableOpacity>
           ))}
         </View>
 
-        <View style={[styles.infoBox, isDarkMode && styles.infoBoxDark]}>
-          <Icon
-            name="info"
-            size={24}
-            color={isDarkMode ? '#5AC8FA' : '#FF002E'}
-          />
-          <Text style={[styles.infoText, isDarkMode && styles.infoTextDark]}>
+        <View style={styles.infoBox}>
+          <Icon name="info" size={24} color={colors.primary} />
+          <Text style={styles.infoText}>
             Os mapas abrem no aplicativo Google Maps instalado no seu
             dispositivo ou no navegador.
           </Text>
@@ -96,59 +69,56 @@ const MapScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  containerDark: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: colors.backgroundSoft,
   },
   scrollContent: {
     padding: 16,
     paddingBottom: 32,
   },
   headerContainer: {
-    marginBottom: 24,
+    marginBottom: 20,
+  },
+  eyebrow: {
+    color: colors.accent,
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1.6,
+    textTransform: 'uppercase',
   },
   title: {
+    fontFamily: 'serif',
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333333',
+    color: colors.primary,
+    marginTop: 4,
     marginBottom: 8,
-  },
-  titleDark: {
-    color: '#ffffff',
   },
   subtitle: {
     fontSize: 14,
-    color: '#666666',
-  },
-  subtitleDark: {
-    color: '#cccccc',
+    color: colors.textSecondary,
   },
   locationsContainer: {
-    marginBottom: 24,
+    marginBottom: 8,
   },
   locationCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderLeftWidth: 6,
+    borderLeftColor: colors.accent,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  locationCardDark: {
-    backgroundColor: '#2a2a2a',
   },
   locationName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333333',
-    marginBottom: 12,
+    fontWeight: '700',
+    color: colors.primary,
   },
-  locationNameDark: {
-    color: '#ffffff',
+  locationDescription: {
+    fontSize: 14,
+    color: colors.textSecondary,
+    marginTop: 4,
+    marginBottom: 12,
+    lineHeight: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -156,32 +126,25 @@ const styles = StyleSheet.create({
   },
   openButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#FF002E',
+    fontWeight: '700',
+    color: colors.accent,
     marginLeft: 8,
-  },
-  openButtonTextDark: {
-    color: '#5AC8FA',
   },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFE8EC',
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: 12,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  infoBoxDark: {
-    backgroundColor: '#2a2a2a',
+    marginTop: 8,
   },
   infoText: {
-    fontSize: 12,
-    color: '#666666',
+    fontSize: 13,
+    color: colors.textSecondary,
     marginLeft: 12,
     flex: 1,
-  },
-  infoTextDark: {
-    color: '#cccccc',
+    lineHeight: 20,
   },
 });
 

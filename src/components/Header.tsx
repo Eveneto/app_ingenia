@@ -1,43 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
   Image,
-  useColorScheme,
+  StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { colors } from '../theme/colors';
+import SideMenu from './SideMenu';
 
-interface HeaderProps {
-}
+const Header: React.FC = () => {
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  const [menuAberto, setMenuAberto] = useState(false);
+  const canGoBack = navigation.canGoBack();
+  const topInset = insets.top;
 
-const Header: React.FC<HeaderProps> = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const botaoMenu = (
+    <TouchableOpacity
+      onPress={() => setMenuAberto(true)}
+      style={styles.side}
+      accessibilityLabel="Abrir menu"
+    >
+      <Icon name="menu" size={26} color={colors.primary} />
+    </TouchableOpacity>
+  );
+
+  const botaoVoltar = (
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={styles.side}
+      accessibilityLabel="Voltar"
+    >
+      <Icon name="arrow-back" size={24} color={colors.primary} />
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={[styles.header, isDarkMode && styles.headerDark]}>
+    <View style={[styles.header, { paddingTop: topInset + 8 }]}>
+      {canGoBack ? botaoVoltar : botaoMenu}
       <Image
-        source={require('../../assets/images/logo-ingenia-2025-semfundo.png')}
+        source={require('../../assets/images/2026/Ingenia_2026.png')}
         style={styles.logo}
         resizeMode="contain"
       />
+      {canGoBack ? botaoMenu : <View style={styles.side} />}
+      <SideMenu visible={menuAberto} onClose={() => setMenuAberto(false)} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    backgroundColor: colors.background,
+    paddingBottom: 8,
+    paddingHorizontal: 8,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  headerDark: {
-    backgroundColor: '#333333',
-    borderBottomColor: '#555555',
+  side: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logo: {
-    width: '100%',
-    height: 100,
-    alignSelf: 'center',
+    flex: 1,
+    height: 92,
   },
 });
 
