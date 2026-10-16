@@ -3,21 +3,30 @@
     "name": "INGENIA 2026",
     "slug": "appingenia",
     "version": "0.0.1",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "platforms": [
       "android",
       "ios"
     ],
     "android": {
-      "package": "com.appingenia"
+      "package": "com.appingenia",
+      "versionCode": 1
     },
     "ios": {
-      "bundleIdentifier": "com.appingenia"
+      "bundleIdentifier": "com.appingenia",
+      "buildNumber": "1"
     },
     "plugins": [
       "expo-sharing",
       "expo-font",
       "@react-native-vector-icons/material-icons",
       "@react-native-vector-icons/material-design-icons"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e5c693b0-0f3c-4db7-9f52-f69e3f2e109b"
+      }
+    }
   }
 }
