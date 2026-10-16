@@ -1,4 +1,23 @@
 {
-  "name": "AppIngenia",
-  "displayName": "INGENIA 2026"
+  "expo": {
+    "name": "INGENIA 2026",
+    "slug": "appingenia",
+    "version": "0.0.1",
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "android": {
+      "package": "com.appingenia"
+    },
+    "ios": {
+      "bundleIdentifier": "com.appingenia"
+    },
+    "plugins": [
+      "expo-sharing",
+      "expo-font",
+      "@react-native-vector-icons/material-icons",
+      "@react-native-vector-icons/material-design-icons"
+    ]
+  }
 }

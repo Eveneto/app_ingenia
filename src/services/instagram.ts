@@ -1,16 +1,14 @@
 import { Alert, Linking, Platform, ToastAndroid, View } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
-import Share, { Social } from 'react-native-share';
+import * as Clipboard from 'expo-clipboard';
+import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import {
-  FACEBOOK_APP_ID,
   INSTAGRAM_HASHTAGS,
   INSTAGRAM_PACKAGE,
   INSTAGRAM_WEB,
   STORY_OUTPUT_HEIGHT,
   STORY_OUTPUT_WIDTH,
 } from '../config/instagram';
-import { colors } from '../theme/colors';
 
 const PLAY_STORE = `https://play.google.com/store/apps/details?id=${INSTAGRAM_PACKAGE}`;
 const PLAY_STORE_APP = `market://details?id=${INSTAGRAM_PACKAGE}`;
@@ -26,10 +24,9 @@ function avisar(mensagem: string) {
 
 async function instagramInstalado() {
   try {
-    const resultado = await Share.isPackageInstalled(INSTAGRAM_PACKAGE);
-    return resultado.isInstalled;
+    return await Linking.canOpenURL('instagram://');
   } catch {
-    return Linking.canOpenURL('instagram://');
+    return false;
   }
 }
 
@@ -50,7 +47,7 @@ function pedirInstagram(mensagem: string) {
 }
 
 export async function compartilharFeed() {
-  Clipboard.setString(INSTAGRAM_HASHTAGS);
+  await Clipboard.setStringAsync(INSTAGRAM_HASHTAGS);
   avisar('Hashtags copiadas. Cole na legenda do post.');
   const instalado = await instagramInstalado();
   if (instalado) {
@@ -61,7 +58,7 @@ export async function compartilharFeed() {
 }
 
 export async function compartilharStory(view: React.RefObject<View | null>) {
-  Clipboard.setString(INSTAGRAM_HASHTAGS);
+  await Clipboard.setStringAsync(INSTAGRAM_HASHTAGS);
 
   const instalado = await instagramInstalado();
   if (!instalado) {
@@ -71,10 +68,10 @@ export async function compartilharStory(view: React.RefObject<View | null>) {
     return;
   }
 
-  if (!FACEBOOK_APP_ID) {
+  if (!(await Sharing.isAvailableAsync())) {
     Alert.alert(
       'Stories',
-      'As hashtags foram copiadas. Para abrir a arte no Instagram, falta o Facebook App ID da Meta em src/config/instagram.ts.',
+      'As hashtags foram copiadas, mas o compartilhamento não está disponível neste dispositivo.',
     );
     return;
   }
@@ -88,29 +85,20 @@ export async function compartilharStory(view: React.RefObject<View | null>) {
   });
 
   avisar(
-    'Hashtags copiadas. No story, cole um texto se quiser que a hashtag seja pesquisável.',
+    'Hashtags copiadas. Escolha o Instagram na lista e cole um texto no story se quiser.',
   );
 
   try {
-    await Share.shareSingle({
-      social: Social.InstagramStories,
-      appId: FACEBOOK_APP_ID,
-      backgroundImage: uri,
-      backgroundTopColor: colors.primary,
-      backgroundBottomColor: colors.accent,
-      useInternalStorage: true,
+    await Sharing.shareAsync(uri, {
+      mimeType: 'image/png',
+      dialogTitle: 'Compartilhar no Instagram Stories',
+      UTI: 'public.png',
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : '';
     if (/cancel|did not share/i.test(message)) {
       return;
     }
-    if (/not installed/i.test(message)) {
-      pedirInstagram(
-        'O Instagram não está instalado neste celular. As hashtags foram copiadas.',
-      );
-      return;
-    }
-    Alert.alert('Instagram', 'Não foi possível abrir o story.');
+    Alert.alert('Instagram', 'Não foi possível abrir o compartilhamento.');
   }
 }

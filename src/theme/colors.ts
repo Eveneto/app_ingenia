@@ -19,10 +19,26 @@ export const sponsorLevelColors: Record<
   { background: string; text: string }
 > = {
   Esmeralda: { background: '#50C878', text: '#FFFFFF' },
+  esmeralda: { background: '#50C878', text: '#FFFFFF' },
   Ouro: { background: '#FFD700', text: '#000000' },
+  ouro: { background: '#FFD700', text: '#000000' },
   Prata: { background: '#C0C0C0', text: '#000000' },
+  prata: { background: '#C0C0C0', text: '#000000' },
   Bronze: { background: '#CD7F32', text: '#FFFFFF' },
+  bronze: { background: '#CD7F32', text: '#FFFFFF' },
 };
+
+export function getSponsorLevelColor(key: string): {
+  background: string;
+  text: string;
+} {
+  return (
+    sponsorLevelColors[key] ?? {
+      background: colors.primary,
+      text: colors.textOnDark,
+    }
+  );
+}
 
 export const categoryTagColors: Record<
   string,

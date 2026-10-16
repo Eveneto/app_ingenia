@@ -1,27 +1,21 @@
 import React, { useRef, useState } from 'react';
-import {
-  Image,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialIcons as Icon } from '@react-native-vector-icons/material-icons';
+import { MaterialDesignIcons as IconCommunity } from '@react-native-vector-icons/material-design-icons';
 import Header from '../components/Header';
+import FadeIn from '../components/motion/FadeIn';
+import PressableScale from '../components/motion/PressableScale';
 import SpeakersSection from '../components/SpeakersSection';
+import SponsorsSection from '../components/SponsorsSection';
 import StoryCard from '../components/StoryCard';
 import {
   MOSTRAR_STORY,
   STORY_LAYOUT_HEIGHT,
   STORY_LAYOUT_WIDTH,
 } from '../config/instagram';
-import { SPONSOR_LEVELS, sponsors } from '../data/sponsors';
 import { compartilharFeed, compartilharStory } from '../services/instagram';
-import { colors, sponsorLevelColors } from '../theme/colors';
+import { colors } from '../theme/colors';
 
 const INSCRICAO_URL = 'https://www.serdigital.com.br/ingenia/2026/safetyarea/';
 
@@ -67,127 +61,125 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.hero}>
-          <Text style={styles.eyebrow}>21 a 23 de outubro de 2026</Text>
-          <Text style={styles.heroTitle}>INGENIA 2026</Text>
-          <Text style={styles.heroText}>
-            Escola Politécnica da Universidade de Pernambuco. Três dias de
-            palestras, workshops e encontros de engenharia.
-          </Text>
-          <TouchableOpacity
-            style={styles.cta}
-            onPress={handleInscricao}
-            activeOpacity={0.85}
-          >
-            <Text style={styles.ctaText}>INSCRIÇÕES ABERTAS</Text>
-          </TouchableOpacity>
-        </View>
+        <FadeIn>
+          <View style={styles.hero}>
+            <Text style={styles.eyebrow}>21 a 23 de outubro de 2026</Text>
+            <Text style={styles.heroTitle}>INGENIA 2026</Text>
+            <Text style={styles.heroText}>
+              Escola Politécnica da Universidade de Pernambuco. Três dias de
+              palestras, workshops e encontros de engenharia.
+            </Text>
+            <PressableScale style={styles.cta} onPress={handleInscricao}>
+              <Text style={styles.ctaText}>INSCRIÇÕES ABERTAS</Text>
+            </PressableScale>
+          </View>
+        </FadeIn>
 
         <View style={styles.buttonsContainer}>
           <MenuButton
             icon="event-note"
             label="Programação"
+            delay={80}
             onPress={() => navigation.navigate('Programacao')}
           />
           <MenuButton
             icon="map"
             label="Mapa"
+            delay={140}
             onPress={() => navigation.navigate('Mapa')}
           />
           <MenuButton
             icon="how-to-reg"
             label="Inscrição"
+            delay={200}
             onPress={handleInscricao}
           />
         </View>
 
-        <SpeakersSection />
+        <FadeIn delay={240}>
+          <SpeakersSection />
+        </FadeIn>
 
-        <View style={styles.instagramCard}>
-          <View style={styles.instagramHeader}>
-            <IconCommunity name="instagram" size={40} color="#E4405F" />
-            <Text style={styles.instagramTitle}>Compartilhe no Instagram</Text>
-          </View>
-          <View style={styles.instagramCaptionBox}>
-            <Text style={styles.instagramCaptionLabel}>Exemplo de legenda</Text>
-            <Text style={styles.instagramCaption}>
-              Participando do INGENIA 2026!{'\n'}
-              Três dias de engenharia, inovação e conexões na POLI-UPE.
-            </Text>
-            <Text style={styles.instagramHashtags}>
-              #Ingenia2026 #POLIUPE #Engenharia #Recife
-            </Text>
-          </View>
-          <View style={styles.instagramButtons}>
-            <TouchableOpacity
-              style={styles.instagramButton}
-              onPress={handleInstagramFeed}
-              activeOpacity={0.7}
-            >
-              <IconCommunity name="image-multiple" size={22} color="#ffffff" />
-              <Text style={styles.instagramButtonText}>Postar no Feed</Text>
-            </TouchableOpacity>
-            {MOSTRAR_STORY ? (
-              <TouchableOpacity
-                style={[styles.instagramButton, styles.instagramButtonStories]}
-                onPress={handleInstagramStories}
-                disabled={enviandoStory}
-                activeOpacity={0.7}
+        <FadeIn delay={300}>
+          <View style={styles.instagramCard}>
+            <View style={styles.instagramHeader}>
+              <IconCommunity name="instagram" size={40} color="#E4405F" />
+              <Text style={styles.instagramTitle}>
+                Compartilhe no Instagram
+              </Text>
+            </View>
+            <View style={styles.instagramCaptionBox}>
+              <Text style={styles.instagramCaptionLabel}>
+                Exemplo de legenda
+              </Text>
+              <Text style={styles.instagramCaption}>
+                Participando do INGENIA 2026!{'\n'}
+                Três dias de engenharia, inovação e conexões na POLI-UPE.
+              </Text>
+              <Text style={styles.instagramHashtags}>
+                #Ingenia2026 #POLIUPE #Engenharia #Recife
+              </Text>
+            </View>
+            <View style={styles.instagramButtons}>
+              <PressableScale
+                style={styles.instagramButton}
+                onPress={handleInstagramFeed}
               >
-                <IconCommunity name="image-plus" size={22} color="#ffffff" />
-                <Text style={styles.instagramButtonText}>
-                  {enviandoStory ? 'Abrindo...' : 'Criar Story'}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        </View>
-
-        <View style={styles.sponsorsContainer}>
-          <Text style={styles.sectionTitle}>Patrocinadores</Text>
-          {SPONSOR_LEVELS.map(level => {
-            const items = sponsors.filter(item => item.level === level);
-            if (items.length === 0) {
-              return null;
-            }
-            const badge = sponsorLevelColors[level];
-            return (
-              <View key={level} style={styles.categorySection}>
-                <View style={[styles.levelBadge, { backgroundColor: badge.background }]}>
-                  <Text style={[styles.levelBadgeText, { color: badge.text }]}>
-                    {level}
+                <IconCommunity
+                  name="image-multiple"
+                  size={22}
+                  color="#ffffff"
+                />
+                <Text style={styles.instagramButtonText}>Postar no Feed</Text>
+              </PressableScale>
+              {MOSTRAR_STORY ? (
+                <PressableScale
+                  style={[
+                    styles.instagramButton,
+                    styles.instagramButtonStories,
+                  ]}
+                  onPress={handleInstagramStories}
+                  disabled={enviandoStory}
+                >
+                  <IconCommunity name="image-plus" size={22} color="#ffffff" />
+                  <Text style={styles.instagramButtonText}>
+                    {enviandoStory ? 'Abrindo...' : 'Criar Story'}
                   </Text>
-                </View>
-                <View style={styles.sponsorsGrid}>
-                  {items.map(sponsor => (
-                    <View key={sponsor.name} style={styles.sponsorItem}>
-                      <Image
-                        source={sponsor.logo}
-                        style={styles.sponsorLogo}
-                        resizeMode="contain"
-                        accessibilityLabel={sponsor.name}
-                      />
-                    </View>
-                  ))}
-                </View>
-              </View>
-            );
-          })}
-        </View>
+                </PressableScale>
+              ) : null}
+            </View>
+          </View>
+        </FadeIn>
+
+        <FadeIn delay={360}>
+          <View style={styles.sponsorsContainer}>
+            <SponsorsSection compact />
+          </View>
+        </FadeIn>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const MenuButton: React.FC<{
-  icon: string;
+  icon: React.ComponentProps<typeof Icon>['name'];
   label: string;
   onPress: () => void;
-}> = ({ icon, label, onPress }) => (
-  <TouchableOpacity style={styles.button} onPress={onPress} activeOpacity={0.7}>
-    <Icon name={icon} size={36} color={colors.accent} />
-    <Text style={styles.buttonText}>{label}</Text>
-  </TouchableOpacity>
+  delay?: number;
+}> = ({ icon, label, onPress, delay = 0 }) => (
+  <FadeIn delay={delay}>
+    <PressableScale style={styles.button} onPress={onPress}>
+      <View style={styles.buttonIconWrap}>
+        <Icon
+          name={icon}
+          size={36}
+          color={colors.accent}
+          style={styles.buttonIcon}
+        />
+      </View>
+      <Text style={styles.buttonText}>{label}</Text>
+    </PressableScale>
+  </FadeIn>
 );
 
 const styles = StyleSheet.create({
@@ -257,7 +249,8 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: colors.background,
-    padding: 20,
+    paddingVertical: 22,
+    paddingHorizontal: 20,
     borderRadius: 2,
     borderWidth: 1,
     borderColor: colors.border,
@@ -266,6 +259,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginBottom: 12,
+    overflow: 'visible',
+  },
+  buttonIconWrap: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'visible',
+  },
+  buttonIcon: {
+    width: 44,
+    height: 44,
+    lineHeight: 44,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
   buttonText: {
     fontSize: 16,
@@ -325,12 +334,14 @@ const styles = StyleSheet.create({
   instagramButton: {
     flex: 1,
     backgroundColor: colors.primary,
-    paddingVertical: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 12,
     borderRadius: 2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
+    minHeight: 48,
   },
   instagramButtonStories: {
     backgroundColor: colors.accent,
@@ -345,51 +356,6 @@ const styles = StyleSheet.create({
     marginHorizontal: -16,
     paddingHorizontal: 16,
     paddingVertical: 20,
-  },
-  sectionTitle: {
-    fontFamily: 'serif',
-    fontSize: 28,
-    color: colors.primary,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  categorySection: {
-    marginBottom: 18,
-    alignItems: 'center',
-  },
-  levelBadge: {
-    borderRadius: 30,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    marginBottom: 12,
-  },
-  levelBadgeText: {
-    fontWeight: '700',
-    fontSize: 14,
-  },
-  sponsorsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  sponsorItem: {
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    margin: 6,
-    width: '44%',
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  sponsorLogo: {
-    width: '100%',
-    height: '100%',
   },
 });
 

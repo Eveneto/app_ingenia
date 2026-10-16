@@ -14,7 +14,9 @@ const AppNavigator: React.FC = () => {
       <Stack.Navigator
         initialRouteName="Menu"
         screenOptions={{
-          headerShown: false, // Usamos Header customizado
+          headerShown: false,
+          animation: 'slide_from_right',
+          animationDuration: 280,
         }}
       >
         <Stack.Screen name="Menu" component={MenuScreen} />
