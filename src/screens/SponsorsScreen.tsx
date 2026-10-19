@@ -1,17 +1,23 @@
-import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { Animated, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../components/Header';
+import Header, { createHeaderScrollHandler } from '../components/Header';
 import SponsorsSection from '../components/SponsorsSection';
 import { colors } from '../theme/colors';
 
 const SponsorsScreen: React.FC = () => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <Header />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <Header scrollY={scrollY} />
+      <Animated.ScrollView
+        contentContainerStyle={styles.scrollContent}
+        scrollEventThrottle={16}
+        onScroll={createHeaderScrollHandler(scrollY)}
+      >
         <SponsorsSection />
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };

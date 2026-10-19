@@ -1,15 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Animated, Linking, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons as Icon } from '@react-native-vector-icons/material-icons';
 import { MaterialDesignIcons as IconCommunity } from '@react-native-vector-icons/material-design-icons';
-import Header from '../components/Header';
+import Header, { createHeaderScrollHandler } from '../components/Header';
 import FadeIn from '../components/motion/FadeIn';
 import PressableScale from '../components/motion/PressableScale';
 import SpeakersSection from '../components/SpeakersSection';
 import SponsorsSection from '../components/SponsorsSection';
 import StoryCard from '../components/StoryCard';
 import {
+  MOSTRAR_SECAO_INSTAGRAM,
   MOSTRAR_STORY,
   STORY_LAYOUT_HEIGHT,
   STORY_LAYOUT_WIDTH,
@@ -21,6 +22,7 @@ const INSCRICAO_URL = 'https://www.serdigital.com.br/ingenia/2026/safetyarea/';
 
 const MenuScreen: React.FC = ({ navigation }: any) => {
   const storyRef = useRef<View>(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
   const [enviandoStory, setEnviandoStory] = useState(false);
 
   const handleInscricao = () => {
@@ -45,8 +47,8 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <Header />
-      {MOSTRAR_STORY ? (
+      <Header scrollY={scrollY} />
+      {MOSTRAR_SECAO_INSTAGRAM && MOSTRAR_STORY ? (
         <View
           ref={storyRef}
           collapsable={false}
@@ -57,9 +59,11 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
         </View>
       ) : null}
 
-      <ScrollView
+      <Animated.ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
+        scrollEventThrottle={16}
+        onScroll={createHeaderScrollHandler(scrollY)}
       >
         <FadeIn>
           <View style={styles.hero}>
@@ -100,63 +104,69 @@ const MenuScreen: React.FC = ({ navigation }: any) => {
           <SpeakersSection />
         </FadeIn>
 
-        <FadeIn delay={300}>
-          <View style={styles.instagramCard}>
-            <View style={styles.instagramHeader}>
-              <IconCommunity name="instagram" size={40} color="#E4405F" />
-              <Text style={styles.instagramTitle}>
-                Compartilhe no Instagram
-              </Text>
-            </View>
-            <View style={styles.instagramCaptionBox}>
-              <Text style={styles.instagramCaptionLabel}>
-                Exemplo de legenda
-              </Text>
-              <Text style={styles.instagramCaption}>
-                Participando do INGENIA 2026!{'\n'}
-                Três dias de engenharia, inovação e conexões na POLI-UPE.
-              </Text>
-              <Text style={styles.instagramHashtags}>
-                #Ingenia2026 #POLIUPE #Engenharia #Recife
-              </Text>
-            </View>
-            <View style={styles.instagramButtons}>
-              <PressableScale
-                style={styles.instagramButton}
-                onPress={handleInstagramFeed}
-              >
-                <IconCommunity
-                  name="image-multiple"
-                  size={22}
-                  color="#ffffff"
-                />
-                <Text style={styles.instagramButtonText}>Postar no Feed</Text>
-              </PressableScale>
-              {MOSTRAR_STORY ? (
+        {MOSTRAR_SECAO_INSTAGRAM ? (
+          <FadeIn delay={300}>
+            <View style={styles.instagramCard}>
+              <View style={styles.instagramHeader}>
+                <IconCommunity name="instagram" size={40} color="#E4405F" />
+                <Text style={styles.instagramTitle}>
+                  Compartilhe no Instagram
+                </Text>
+              </View>
+              <View style={styles.instagramCaptionBox}>
+                <Text style={styles.instagramCaptionLabel}>
+                  Exemplo de legenda
+                </Text>
+                <Text style={styles.instagramCaption}>
+                  Participando do INGENIA 2026!{'\n'}
+                  Três dias de engenharia, inovação e conexões na POLI-UPE.
+                </Text>
+                <Text style={styles.instagramHashtags}>
+                  #Ingenia2026 #POLIUPE #Engenharia #Recife
+                </Text>
+              </View>
+              <View style={styles.instagramButtons}>
                 <PressableScale
-                  style={[
-                    styles.instagramButton,
-                    styles.instagramButtonStories,
-                  ]}
-                  onPress={handleInstagramStories}
-                  disabled={enviandoStory}
+                  style={styles.instagramButton}
+                  onPress={handleInstagramFeed}
                 >
-                  <IconCommunity name="image-plus" size={22} color="#ffffff" />
-                  <Text style={styles.instagramButtonText}>
-                    {enviandoStory ? 'Abrindo...' : 'Criar Story'}
-                  </Text>
+                  <IconCommunity
+                    name="image-multiple"
+                    size={22}
+                    color="#ffffff"
+                  />
+                  <Text style={styles.instagramButtonText}>Postar no Feed</Text>
                 </PressableScale>
-              ) : null}
+                {MOSTRAR_STORY ? (
+                  <PressableScale
+                    style={[
+                      styles.instagramButton,
+                      styles.instagramButtonStories,
+                    ]}
+                    onPress={handleInstagramStories}
+                    disabled={enviandoStory}
+                  >
+                    <IconCommunity
+                      name="image-plus"
+                      size={22}
+                      color="#ffffff"
+                    />
+                    <Text style={styles.instagramButtonText}>
+                      {enviandoStory ? 'Abrindo...' : 'Criar Story'}
+                    </Text>
+                  </PressableScale>
+                ) : null}
+              </View>
             </View>
-          </View>
-        </FadeIn>
+          </FadeIn>
+        ) : null}
 
         <FadeIn delay={360}>
           <View style={styles.sponsorsContainer}>
             <SponsorsSection compact />
           </View>
         </FadeIn>
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };

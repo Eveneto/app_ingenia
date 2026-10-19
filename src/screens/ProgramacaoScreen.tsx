@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   Modal,
   RefreshControl,
   ScrollView,
@@ -12,7 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons as Icon } from '@react-native-vector-icons/material-icons';
-import Header from '../components/Header';
+import Header, { createHeaderScrollHandler } from '../components/Header';
 import {
   diaAtivoId,
   fetchProgramacao,
@@ -35,6 +36,7 @@ const ProgramacaoScreen: React.FC = () => {
   const [busca, setBusca] = useState('');
   const [detalhe, setDetalhe] = useState<Atividade | null>(null);
   const diaEscolhido = useRef(false);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const aplicar = useCallback(
     (programacao: ProgramacaoCompleta, preservarDia: boolean) => {
@@ -125,7 +127,7 @@ const ProgramacaoScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <Header />
+      <Header scrollY={scrollY} />
       <View style={styles.toolbar}>
         <Text style={styles.eyebrow}>Programação 2026</Text>
         <Text style={styles.title}>Agenda</Text>
@@ -198,8 +200,10 @@ const ProgramacaoScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView
+        <Animated.ScrollView
           contentContainerStyle={styles.list}
+          scrollEventThrottle={16}
+          onScroll={createHeaderScrollHandler(scrollY)}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -240,7 +244,7 @@ const ProgramacaoScreen: React.FC = () => {
               </View>
             ))
           )}
-        </ScrollView>
+        </Animated.ScrollView>
       )}
 
       <Modal

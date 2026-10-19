@@ -14,6 +14,9 @@ export const INSTAGRAM_WEB = 'https://www.instagram.com/';
  */
 export const FACEBOOK_APP_ID = '';
 
+/** Seção completa de Instagram na tela inicial. */
+export const MOSTRAR_SECAO_INSTAGRAM = false;
+
 /** O botão de story fica oculto até o Facebook App ID estar configurado. */
 export const MOSTRAR_STORY = false;
 

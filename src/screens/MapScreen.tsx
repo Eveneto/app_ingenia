@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Linking,
-  ScrollView,
+  Animated,
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons as Icon } from '@react-native-vector-icons/material-icons';
-import Header from '../components/Header';
+import Header, { createHeaderScrollHandler } from '../components/Header';
 import { mapLocations } from '../data/maps';
 import { colors } from '../theme/colors';
 
 const MapScreen: React.FC = () => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
   const handleOpenMap = (mapUrl: string, locationName: string) => {
     Linking.openURL(mapUrl).catch(() => {
       Alert.alert('Erro', `Não foi possível abrir o mapa de ${locationName}`);
@@ -23,9 +25,13 @@ const MapScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <Header />
+      <Header scrollY={scrollY} />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <Animated.ScrollView
+        contentContainerStyle={styles.scrollContent}
+        scrollEventThrottle={16}
+        onScroll={createHeaderScrollHandler(scrollY)}
+      >
         <View style={styles.headerContainer}>
           <Text style={styles.eyebrow}>Local</Text>
           <Text style={styles.title}>Mapas dos locais</Text>
@@ -61,7 +67,7 @@ const MapScreen: React.FC = () => {
             dispositivo ou no navegador.
           </Text>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };

@@ -37,14 +37,14 @@ const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const drawerWidth = Math.min(width * 0.82, 320);
-  const translateX = useRef(new Animated.Value(-drawerWidth)).current;
+  const translateX = useRef(new Animated.Value(drawerWidth)).current;
   const backdrop = useRef(new Animated.Value(0)).current;
 
   useLayoutEffect(() => {
     if (!visible) {
       return;
     }
-    translateX.setValue(-drawerWidth);
+    translateX.setValue(drawerWidth);
     backdrop.setValue(0);
     Animated.parallel([
       Animated.timing(translateX, {
@@ -63,7 +63,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ visible, onClose }) => {
   const close = (after?: () => void) => {
     Animated.parallel([
       Animated.timing(translateX, {
-        toValue: -drawerWidth,
+        toValue: drawerWidth,
         duration: 180,
         useNativeDriver: true,
       }),
@@ -188,15 +188,15 @@ const styles = StyleSheet.create({
   },
   drawer: {
     position: 'absolute',
-    left: 0,
+    right: 0,
     top: 0,
     bottom: 0,
     backgroundColor: colors.background,
-    borderRightWidth: 4,
-    borderRightColor: colors.accent,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.accent,
     elevation: 12,
     shadowColor: colors.shadow,
-    shadowOffset: { width: 4, height: 0 },
+    shadowOffset: { width: -4, height: 0 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
   },
@@ -242,8 +242,8 @@ const styles = StyleSheet.create({
   },
   itemAtivo: {
     backgroundColor: colors.backgroundSoft,
-    borderLeftWidth: 4,
-    borderLeftColor: colors.accent,
+    borderRightWidth: 4,
+    borderRightColor: colors.accent,
   },
   itemText: {
     fontSize: 16,
