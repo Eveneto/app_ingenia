@@ -8,6 +8,7 @@ import React from 'react';
 import { ActivityIndicator, StatusBar, useColorScheme, View } from 'react-native';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AppUpdateBanner from './src/components/AppUpdateBanner';
 import AppNavigator from './src/navigation/AppNavigator';
 import { colors } from './src/theme/colors';
 
@@ -37,6 +38,7 @@ function App(): React.JSX.Element {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <AppNavigator />
+      <AppUpdateBanner />
     </SafeAreaProvider>
   );
 }
